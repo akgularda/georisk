@@ -137,6 +137,24 @@ export function buildMonitoringWatchItems(
   return items;
 }
 
+export function findMonitoringWatchItem(
+  country: OperationalCountry,
+  countries: OperationalCountry[],
+  reports: ReportFrontmatter[],
+): MonitoringWatchItem | null {
+  return buildMonitoringWatchItems(countries, reports).find((item) => item.country.iso3 === country.iso3) ?? null;
+}
+
+export function getMonitoringWatchRank(
+  country: OperationalCountry,
+  countries: OperationalCountry[],
+  reports: ReportFrontmatter[],
+): number | null {
+  const items = buildMonitoringWatchItems(countries, reports);
+  const index = items.findIndex((item) => item.country.iso3 === country.iso3);
+  return index >= 0 ? index + 1 : null;
+}
+
 export function getCountryDisplaySummary(
   country: OperationalCountry,
   status: OperationalStatusSummary,

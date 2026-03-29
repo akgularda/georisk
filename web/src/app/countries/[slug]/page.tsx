@@ -5,6 +5,7 @@ import { CountryPulseGraphic } from "@/components/country-pulse-graphic";
 import { MethodologyNote } from "@/components/methodology-note";
 import { ReportCard } from "@/components/report-card";
 import {
+  formatDate,
   formatDateTime,
   formatProbabilityBps,
   formatProbabilityDelta,
@@ -14,7 +15,15 @@ import {
 } from "@/lib/formatters";
 import { getAllReports } from "@/lib/content";
 import { getOperationalCountries, getOperationalCountryBySlug, getOperationalStatusSummary } from "@/lib/site-data";
-import { getCountryDisplaySummary, getPredictedConflictLabel, getReportsForCountry } from "@/lib/monitoring-presentation";
+import {
+  findMonitoringWatchItem,
+  getCountryDisplaySummary,
+  getMonitoringHeroConflictLabel,
+  getMonitoringWatchRank,
+  getPredictedConflictLabel,
+  getReportsForCountry,
+  hasPublishableLeader,
+} from "@/lib/monitoring-presentation";
 
 interface CountryPageProps {
   params: Promise<{ slug: string }>;
@@ -53,7 +62,20 @@ export default async function CountryPage({ params }: CountryPageProps) {
   const reports = await getAllReports();
   const relatedReports = getReportsForCountry(country, reports);
   const displaySummary = getCountryDisplaySummary(country, status, reports);
-  const conflictLabel = status.predictedConflict?.label ?? getPredictedConflictLabel(relatedReports[0] ?? null, country);
+  const monitoringMode = !hasPublishableLeader(status);
+  const primaryReport = relatedReports[0] ?? null;
+  const conflictLabel = monitoringMode
+    ? getMonitoringHeroConflictLabel(primaryReport, country, status.predictedConflict?.label)
+    : getPredictedConflictLabel(primaryReport, country);
+  const monitoringWatchRank = monitoringMode ? getMonitoringWatchRank(country, getOperationalCountries(), reports) : null;
+  const monitoringWatchItem = monitoringMode ? findMonitoringWatchItem(country, getOperationalCountries(), reports) : null;
+  const displaySourceNote = monitoringMode
+    ? "Report-led monitoring keeps this country visible while the model remains in no-clear-leader mode. Signals synthesize event, narrative, trade, shipping, governance, and humanitarian layers into a theater-oriented risk read."
+    : country.sourceNote;
+  const statusChipLabel = monitoringMode ? "Current watch" : getAlertStatusLabel(country.alertStatus);
+  const statusChipClasses = monitoringMode
+    ? "border-[#f06758]/35 bg-[#261214] text-[#f5b0aa]"
+    : getAlertStatusClasses(country.alertStatus);
 
   return (
     <div className="dashboard-canvas pb-20 md:pb-8">
@@ -63,36 +85,43 @@ export default async function CountryPage({ params }: CountryPageProps) {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="command-eyebrow text-[#ff8f82]">{country.region} / {country.iso3}</p>
-              {status.noClearLeader ? (
+              {monitoringMode ? (
                 <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[rgba(255,143,130,0.82)]">
                   Predicted conflict: {conflictLabel}
                 </p>
               ) : null}
               <h2 className="font-headline mt-4 text-5xl font-bold tracking-[-0.07em] text-foreground sm:text-6xl">{country.name.toUpperCase()}</h2>
             </div>
-            <div className={`inline-flex rounded-full border px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.18em] ${getAlertStatusClasses(country.alertStatus)}`}>
-              {getAlertStatusLabel(country.alertStatus)}
+            <div className={`inline-flex rounded-full border px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.18em] ${statusChipClasses}`}>
+              {statusChipLabel}
             </div>
           </div>
 
           <p className="mt-5 max-w-3xl text-base leading-8 text-foreground">{displaySummary}</p>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">{country.sourceNote}</p>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">{displaySourceNote}</p>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-4">
             <div className="command-panel-inset p-4">
-              <p className="command-eyebrow">Rank</p>
-              <p className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-foreground">{String(country.rank).padStart(2, "0")}</p>
-            </div>
-            <div className="command-panel-inset p-4">
-              <p className="command-eyebrow">30d Probability</p>
-              <p className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-foreground">{formatProbabilityPercent(country.probability)}</p>
-              <p className="mt-2 text-sm text-muted">{formatProbabilityBps(country.probability)}</p>
-            </div>
-            <div className="command-panel-inset p-4">
-              <p className="command-eyebrow">Weekly Move</p>
-              <p className={country.delta > 0 ? "mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#ff8f82]" : "mt-3 text-3xl font-semibold tracking-[-0.06em] text-foreground"}>
-                {formatProbabilityDelta(country.delta)}
+              <p className="command-eyebrow">{monitoringMode ? "Watch Rank" : "Rank"}</p>
+              <p className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-foreground">
+                {monitoringMode ? String(monitoringWatchRank ?? 0).padStart(2, "0") : String(country.rank).padStart(2, "0")}
               </p>
+            </div>
+            <div className="command-panel-inset p-4">
+              <p className="command-eyebrow">{monitoringMode ? "Predicted Conflict" : "30d Probability"}</p>
+              <p className={monitoringMode ? "mt-3 text-2xl font-semibold leading-tight text-foreground" : "mt-3 text-3xl font-semibold tracking-[-0.06em] text-foreground"}>
+                {monitoringMode ? conflictLabel : formatProbabilityPercent(country.probability)}
+              </p>
+              <p className="mt-2 text-sm text-muted">
+                {monitoringMode ? `Primary country focus: ${country.name}` : formatProbabilityBps(country.probability)}
+              </p>
+            </div>
+            <div className="command-panel-inset p-4">
+              <p className="command-eyebrow">{monitoringMode ? "Latest Brief" : "Weekly Move"}</p>
+              <p className={monitoringMode ? "mt-3 text-2xl font-semibold leading-tight text-foreground" : country.delta > 0 ? "mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#ff8f82]" : "mt-3 text-3xl font-semibold tracking-[-0.06em] text-foreground"}>
+                {monitoringMode ? (primaryReport ? formatDate(primaryReport.date) : "Live snapshot") : formatProbabilityDelta(country.delta)}
+              </p>
+              {monitoringMode ? <p className="mt-2 text-sm text-muted">{primaryReport?.title ?? monitoringWatchItem?.reason ?? "Monitoring route"}</p> : null}
             </div>
             <div className="command-panel-inset p-4">
               <p className="command-eyebrow">Forecast Window</p>
@@ -113,22 +142,22 @@ export default async function CountryPage({ params }: CountryPageProps) {
           />
           <div className="shell-card p-6">
             <p className="command-eyebrow text-[#ff8f82]">Publication Metadata</p>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div>
+            <div className="mt-4 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+              <div className="min-w-0">
                 <p className="command-eyebrow">Published</p>
                 <p className="mt-2 text-sm font-semibold text-foreground">{formatDateTime(country.publishedAt)}</p>
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="command-eyebrow">Freshness</p>
                 <p className="mt-2 text-sm font-semibold uppercase tracking-[0.18em] text-foreground">{country.freshnessTier}</p>
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="command-eyebrow">Model</p>
-                <p className="mt-2 text-sm font-semibold text-foreground">{country.modelVersion}</p>
+                <p className="mt-2 text-sm font-semibold leading-6 text-foreground [overflow-wrap:anywhere]">{country.modelVersion}</p>
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="command-eyebrow">Target</p>
-                <p className="mt-2 text-sm font-semibold text-foreground">{country.targetName}</p>
+                <p className="mt-2 text-sm font-semibold leading-6 text-foreground [overflow-wrap:anywhere]">{country.targetName}</p>
               </div>
             </div>
             <p className="mt-4 text-sm leading-7 text-muted">

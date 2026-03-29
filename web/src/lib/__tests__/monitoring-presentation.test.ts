@@ -3,9 +3,11 @@ import test from "node:test";
 
 import {
   buildMonitoringWatchItems,
+  findMonitoringWatchItem,
   getCountryDisplaySummary,
   getMonitoringHeroConflictLabel,
   getMonitoringHeroSummary,
+  getMonitoringWatchRank,
   getPredictedConflictLabel,
   getPrimaryCountryLabel,
   getReportConflictLabel,
@@ -142,6 +144,38 @@ test("prioritizes report-backed countries when monitoring mode has no clear lead
   const items = buildMonitoringWatchItems(countries, reports);
 
   assert.deepEqual(items.map((item) => item.country.iso3), ["IRN", "ISR", "SDN", "AUS"]);
+});
+
+test("finds the report-backed watch item and rank for a monitoring country route", () => {
+  const countries = [
+    buildCountry({ iso3: "AUS", slug: "australia", name: "Australia", rank: 1, probability: 0.0004 }),
+    buildCountry({ iso3: "IRN", slug: "iran", name: "Iran", rank: 26 }),
+    buildCountry({ iso3: "ISR", slug: "israel", name: "Israel", rank: 27 }),
+    buildCountry({ iso3: "SDN", slug: "sudan", name: "Sudan", rank: 28 }),
+  ];
+  const reports = [
+    buildReport({
+      title: "Iran-Israel theater watch",
+      slug: "iran-israel-escalation-watch",
+      date: "2026-03-27",
+      summary: "Iran and Israel now sit at the center of the theater desk.",
+      region: "Middle East",
+      countries: ["iran", "israel"],
+    }),
+    buildReport({
+      title: "Sudan risk brief",
+      slug: "sudan-corridor-pressure",
+      date: "2026-03-26",
+      summary: "Sudan remains under heavy corridor pressure.",
+      region: "Africa",
+      countries: ["sudan"],
+    }),
+  ];
+
+  const watchItem = findMonitoringWatchItem(countries[1], countries, reports);
+
+  assert.equal(watchItem?.report?.slug, "iran-israel-escalation-watch");
+  assert.equal(getMonitoringWatchRank(countries[1], countries, reports), 1);
 });
 
 test("uses report-backed summary for a country page during monitoring mode", () => {
