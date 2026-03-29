@@ -59,10 +59,13 @@ COUNTRY_REGION_OVERRIDES = {
 }
 
 
-def normalize_country_name_to_iso3(country_name: str | None) -> str | None:
-    if not country_name:
+def normalize_country_name_to_iso3(country_name: object | None) -> str | None:
+    if country_name is None or pd.isna(country_name):
         return None
-    normalized_name = COUNTRY_NAME_OVERRIDES.get(country_name.strip(), country_name.strip())
+    normalized_input = str(country_name).strip()
+    if not normalized_input:
+        return None
+    normalized_name = COUNTRY_NAME_OVERRIDES.get(normalized_input, normalized_input)
     if normalized_name is None:
         return None
     try:
