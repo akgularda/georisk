@@ -11,6 +11,7 @@ from urllib import error, request
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
+DEFAULT_MODEL = "openrouter/free"
 CACHE_DIR = REPO_ROOT / "artifacts" / "ai" / "openrouter"
 
 
@@ -23,7 +24,15 @@ class CountryNarrative:
 
 
 def openrouter_is_configured() -> bool:
-    return bool(os.getenv("OPENROUTER_API_KEY") and os.getenv("OPENROUTER_MODEL"))
+    return bool(os.getenv("OPENROUTER_API_KEY"))
+
+
+def resolve_openrouter_model() -> str:
+    return os.getenv("OPENROUTER_MODEL") or DEFAULT_MODEL
+
+
+def resolve_openrouter_base_url() -> str:
+    return os.getenv("OPENROUTER_BASE_URL") or DEFAULT_BASE_URL
 
 
 def _cache_path(payload: dict[str, Any]) -> Path:
@@ -95,9 +104,9 @@ def maybe_generate_country_narrative(
             pass
 
     api_key = os.getenv("OPENROUTER_API_KEY")
-    model = os.getenv("OPENROUTER_MODEL")
-    base_url = os.getenv("OPENROUTER_BASE_URL", DEFAULT_BASE_URL)
-    if not api_key or not model:
+    model = resolve_openrouter_model()
+    base_url = resolve_openrouter_base_url()
+    if not api_key:
         return None
 
     prompt = {
