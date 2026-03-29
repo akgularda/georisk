@@ -54,7 +54,10 @@ jobs:
         run: |
           test -f web/out/index.html
           test -f web/out/api/health.json
-      - uses: actions/configure-pages@v5
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
