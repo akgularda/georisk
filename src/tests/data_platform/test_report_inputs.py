@@ -4,7 +4,7 @@ import json
 
 import pandas as pd
 
-from src.data_platform.serving.report_inputs import build_gold_report_inputs
+from src.data_platform.serving.report_inputs import ai_narrative_country_iso3s, build_gold_report_inputs
 
 
 def test_build_gold_report_inputs_uses_latest_week_per_country() -> None:
@@ -130,3 +130,19 @@ def test_build_gold_report_inputs_nulls_forecast_fields_when_latest_labels_are_u
         "Trailing 28-day ACLED events: 9.",
         "GDELT event count in the trailing 7 days: 18.",
     ]
+
+
+def test_ai_narrative_country_iso3s_prefers_top_scores_and_curated_conflicts() -> None:
+    latest_rows = pd.DataFrame(
+        {
+            "country_iso3": ["USA", "FRA", "IRN", "UKR", "BRA"],
+            "risk_score": [0.9, 0.1, 0.2, None, 0.8],
+        }
+    )
+
+    eligible = ai_narrative_country_iso3s(latest_rows, max_count=2)
+
+    assert "USA" in eligible
+    assert "BRA" in eligible
+    assert "IRN" in eligible
+    assert "UKR" in eligible

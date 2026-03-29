@@ -203,3 +203,34 @@ def test_build_gold_social_inputs_handles_unknown_previous_score_without_crashin
     assert pd.isna(usa_row["score_delta"])
     assert usa_row["summary_line"] == "United States enters the high monitoring band after 9 ACLED events over 28 days and 18 GDELT events over 7 days."
     assert usa_row["headline"] == "United States monitoring update: high"
+
+
+def test_build_gold_social_inputs_does_not_call_openrouter(monkeypatch) -> None:
+    snapshot_ts = pd.Timestamp("2026-03-27T12:00:00Z")
+    country_week_features = pd.DataFrame(
+        {
+            "country_iso3": ["USA"],
+            "country_name": ["United States"],
+            "region_name": ["North America"],
+            "week_start_date": [pd.Timestamp("2026-03-23")],
+            "label_escalation_7d": [1],
+            "label_escalation_30d": [1],
+            "label_onset_30d": [1],
+            "acled_event_count_7d": [4],
+            "acled_event_count_28d": [9],
+            "gdelt_event_count_7d": [18],
+            "food_price_index": [125.0],
+            "macro_cpi_yoy": [3.4],
+            "climate_drought_severity_index": [0.8],
+            "snapshot_ts_utc": [snapshot_ts],
+        }
+    )
+
+    monkeypatch.setattr(
+        "src.ai.openrouter.maybe_generate_country_narrative",
+        lambda **kwargs: (_ for _ in ()).throw(AssertionError("OpenRouter should not be called for social inputs")),
+    )
+
+    social_inputs = build_gold_social_inputs(country_week_features)
+
+    assert social_inputs.iloc[0]["headline"] == "United States monitoring update: high"

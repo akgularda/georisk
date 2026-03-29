@@ -12,6 +12,7 @@ from urllib import error, request
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
 DEFAULT_MODEL = "openrouter/free"
+DEFAULT_TIMEOUT_SECONDS = 10
 CACHE_DIR = REPO_ROOT / "artifacts" / "ai" / "openrouter"
 
 
@@ -33,6 +34,16 @@ def resolve_openrouter_model() -> str:
 
 def resolve_openrouter_base_url() -> str:
     return os.getenv("OPENROUTER_BASE_URL") or DEFAULT_BASE_URL
+
+
+def resolve_openrouter_timeout_seconds() -> int:
+    raw_value = os.getenv("OPENROUTER_TIMEOUT_SECONDS")
+    if not raw_value:
+        return DEFAULT_TIMEOUT_SECONDS
+    try:
+        return max(1, int(raw_value))
+    except ValueError:
+        return DEFAULT_TIMEOUT_SECONDS
 
 
 def _cache_path(payload: dict[str, Any]) -> Path:
@@ -106,6 +117,7 @@ def maybe_generate_country_narrative(
     api_key = os.getenv("OPENROUTER_API_KEY")
     model = resolve_openrouter_model()
     base_url = resolve_openrouter_base_url()
+    timeout_seconds = resolve_openrouter_timeout_seconds()
     if not api_key:
         return None
 
@@ -162,7 +174,7 @@ def maybe_generate_country_narrative(
     )
 
     try:
-        with request.urlopen(req, timeout=30) as response:
+        with request.urlopen(req, timeout=timeout_seconds) as response:
             raw = json.loads(response.read().decode("utf-8"))
     except (TimeoutError, OSError, error.HTTPError, json.JSONDecodeError):
         return None

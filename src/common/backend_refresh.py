@@ -250,7 +250,7 @@ def _timestamp() -> str:
 
 def _log_line(log_handle: TextIO, message: str) -> None:
     line = f"[{datetime.now().astimezone().isoformat(timespec='seconds')}] {message}"
-    print(line)
+    print(line, flush=True)
     log_handle.write(f"{line}\n")
     log_handle.flush()
 
@@ -259,7 +259,7 @@ def _write_output(log_handle: TextIO, output: str) -> None:
     if not output:
         return
     text = output if output.endswith("\n") else f"{output}\n"
-    print(text, end="")
+    print(text, end="", flush=True)
     log_handle.write(text)
     log_handle.flush()
 

@@ -4,7 +4,6 @@ import json
 
 import pandas as pd
 
-from src.ai.openrouter import maybe_generate_country_narrative
 from src.data_platform.serving.report_inputs import (
     _country_week_with_scores,
     _event_phrase,
@@ -98,21 +97,6 @@ def build_gold_social_inputs(country_week_features: pd.DataFrame) -> pd.DataFram
             )
             headline = f"{row['country_name']} monitoring update: {risk_level}"
         body = f"{summary_line} Drivers: {', '.join(json.loads(top_drivers))}."
-        narrative = maybe_generate_country_narrative(
-            country_name=str(row["country_name"]),
-            predicted_conflict_label=predicted_conflict_label,
-            region_name=None if pd.isna(row.get("region_name")) else str(row.get("region_name")),
-            forecast_target="label_escalation_30d",
-            horizon_days=30,
-            risk_level=None if pd.isna(risk_level) else str(risk_level),
-            forecast_probability=current_score,
-            summary_fallback=summary_line,
-            social_summary_fallback=summary_line,
-            social_headline_fallback=headline,
-            social_body_fallback=body,
-            top_drivers=json.loads(top_drivers),
-            chronology=[],
-        )
         social_rows.append(
             {
                 "post_id": f"post-{slug}",
@@ -125,11 +109,11 @@ def build_gold_social_inputs(country_week_features: pd.DataFrame) -> pd.DataFram
                 "forecast_horizon_days": 30,
                 "forecast_probability": current_score,
                 "score_delta": score_delta,
-                "summary_line": narrative.social_summary_line if narrative is not None else summary_line,
+                "summary_line": summary_line,
                 "top_drivers": top_drivers,
                 "report_slug": slug,
-                "headline": narrative.social_headline if narrative is not None else headline,
-                "body": narrative.social_body if narrative is not None else body,
+                "headline": headline,
+                "body": body,
                 "call_to_action": "Review the latest country monitoring brief.",
                 "destination_url": f"/countries/{slug}",
                 "source_snapshot_hash": source_snapshot_hash_from_row(row),

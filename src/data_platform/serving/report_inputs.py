@@ -32,6 +32,7 @@ REPORT_INPUT_COLUMNS = [
     "source_snapshot_hash",
     "snapshot_ts_utc",
 ]
+MAX_AI_NARRATIVE_COUNTRIES = 6
 
 CURATED_CONFLICTS_BY_ISO3: dict[str, list[dict[str, str]]] = {
     "CHN": [
@@ -198,12 +199,25 @@ def predicted_conflict_from_row(row: pd.Series) -> tuple[str, list[dict[str, str
     )
 
 
+def ai_narrative_country_iso3s(latest_rows: pd.DataFrame, *, max_count: int = MAX_AI_NARRATIVE_COUNTRIES) -> set[str]:
+    if latest_rows.empty:
+        return set()
+
+    scored = latest_rows.copy()
+    scored["risk_score_sort"] = pd.to_numeric(scored["risk_score"], errors="coerce").fillna(-1.0)
+    top_rows = scored.sort_values(["risk_score_sort", "country_iso3"], ascending=[False, True]).head(max_count)
+    eligible = {str(iso3).upper() for iso3 in top_rows["country_iso3"].tolist()}
+    eligible.update(CURATED_CONFLICTS_BY_ISO3.keys())
+    return eligible
+
+
 def build_gold_report_inputs(country_week_features: pd.DataFrame) -> pd.DataFrame:
     if country_week_features.empty:
         return _empty_report_inputs()
 
     latest_rows = _latest_country_week_rows(country_week_features)
     latest_rows = _country_week_with_scores(latest_rows)
+    ai_eligible_iso3s = ai_narrative_country_iso3s(latest_rows)
     reports: list[dict[str, object]] = []
 
     for _, row in latest_rows.iterrows():
@@ -215,21 +229,23 @@ def build_gold_report_inputs(country_week_features: pd.DataFrame) -> pd.DataFram
         slug = f"{str(row['country_iso3']).lower()}-latest"
         summary = summary_from_row(row, risk_level, risk_score)
         predicted_conflict_label, predicted_conflict_countries, reason_source = predicted_conflict_from_row(row)
-        narrative = maybe_generate_country_narrative(
-            country_name=str(row["country_name"]),
-            predicted_conflict_label=predicted_conflict_label,
-            region_name=None if pd.isna(row.get("region_name")) else str(row.get("region_name")),
-            forecast_target="label_escalation_30d",
-            horizon_days=30,
-            risk_level=None if pd.isna(risk_level) else str(risk_level),
-            forecast_probability=risk_score,
-            summary_fallback=summary,
-            social_summary_fallback=summary,
-            social_headline_fallback=f"{row['country_name']} monitoring update",
-            social_body_fallback=summary,
-            top_drivers=top_drivers,
-            chronology=chronology,
-        )
+        narrative = None
+        if str(row["country_iso3"]).upper() in ai_eligible_iso3s:
+            narrative = maybe_generate_country_narrative(
+                country_name=str(row["country_name"]),
+                predicted_conflict_label=predicted_conflict_label,
+                region_name=None if pd.isna(row.get("region_name")) else str(row.get("region_name")),
+                forecast_target="label_escalation_30d",
+                horizon_days=30,
+                risk_level=None if pd.isna(risk_level) else str(risk_level),
+                forecast_probability=risk_score,
+                summary_fallback=summary,
+                social_summary_fallback=summary,
+                social_headline_fallback=f"{row['country_name']} monitoring update",
+                social_body_fallback=summary,
+                top_drivers=top_drivers,
+                chronology=chronology,
+            )
         reports.append(
             {
                 "report_id": f"report-{slug}",
