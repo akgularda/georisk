@@ -1,0 +1,29 @@
+{
+  "iso3": "ISR",
+  "country_name": "Israel",
+  "region_name": "Asia",
+  "report_slug": "isr-latest",
+  "summary": "Israel has no observed forward label outcome yet for the latest country-week snapshot.",
+  "chronology": [
+    "Week of 2026-03-23: 0 ACLED events in the trailing 7 days.",
+    "Trailing 28-day ACLED events: 0.",
+    "GDELT event count in the trailing 7 days: 5."
+  ],
+  "top_drivers": [
+    "ACLED events (28d): 0",
+    "GDELT events (7d): 5",
+    "Food price index: 104.7"
+  ],
+  "forecast": {
+    "score": 0.0,
+    "delta": 0.0,
+    "rank": 27,
+    "forecast_as_of": "2026-03-23",
+    "freshness_tier": "fresh",
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "source_snapshot_hash": "5220ad1e7a031acbef44cfcedc76d96d3be1092b03838fb9add20ecd7f4a9dfe"
+}

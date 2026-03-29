@@ -1,0 +1,29 @@
+{
+  "iso3": "AFG",
+  "country_name": "Afghanistan",
+  "region_name": "Asia",
+  "report_slug": "afg-latest",
+  "summary": "Afghanistan has no observed forward label outcome yet for the latest country-week snapshot.",
+  "chronology": [
+    "Week of 2026-03-23: 0 ACLED events in the trailing 7 days.",
+    "Trailing 28-day ACLED events: 0.",
+    "GDELT event count in the trailing 7 days: 0."
+  ],
+  "top_drivers": [
+    "ACLED events (28d): 0",
+    "GDELT events (7d): 0",
+    "Food price index: 104.7"
+  ],
+  "forecast": {
+    "score": 0.0,
+    "delta": 0.0,
+    "rank": 18,
+    "forecast_as_of": "2026-03-23",
+    "freshness_tier": "fresh",
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "source_snapshot_hash": "260c95fe04b9c23a5331ebcadee99f3e22f86a3d70347ee5e648c05bec5cff94"
+}

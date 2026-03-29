@@ -1,0 +1,239 @@
+{
+  "manifest": {
+    "schema_version": "1.0.0",
+    "snapshot_id": "site-snapshot-2026-03-28",
+    "published_at": "2026-03-28T12:00:00Z",
+    "fresh_until": "2026-04-07T12:00:00Z",
+    "stale_after": "2026-04-18T12:00:00Z",
+    "baseline_used": false,
+    "forecast_as_of": "2026-03-28",
+    "generated_at": "2026-03-28T11:55:00Z",
+    "coverage_count": 2,
+    "top_country_iso3": "LBN",
+    "top_country_name": "Lebanon",
+    "predicted_conflict": {
+      "label": "Lebanon / Israel",
+      "countries": [
+        {
+          "iso3": "LBN",
+          "country_name": "Lebanon"
+        },
+        {
+          "iso3": "ISR",
+          "country_name": "Israel"
+        }
+      ],
+      "summary": "Lebanon and Israel remain the lead interstate pressure corridor in the published weekly snapshot.",
+      "report_slug": "lbn-latest",
+      "reason_source": "report_inputs",
+      "target_name": "country_week_onset_30d",
+      "horizon_days": 30
+    },
+    "primary_target": "onset",
+    "alert_type": "Onset Watch",
+    "model_status": "promoted",
+    "no_clear_leader": false,
+    "provenance": {
+      "onset": {
+        "training": {
+          "run_name": "train_country_week_onset_logit_30d",
+          "artifact_path": "artifacts/forecasting/train/country_week_onset_logit_30d",
+          "completed_at": "2026-03-28T10:30:00Z",
+          "model_name": "logit"
+        },
+        "calibration": {
+          "run_name": "country_week_onset_logit",
+          "artifact_path": "artifacts/forecasting/calibration/country_week_onset_logit",
+          "completed_at": "2026-03-28T10:45:00Z",
+          "model_name": "logit"
+        },
+        "backtest": {
+          "run_name": "country_week_onset_logit",
+          "artifact_path": "artifacts/backtesting/run/country_week_onset_logit",
+          "completed_at": "2026-03-28T11:00:00Z",
+          "model_name": "logit"
+        }
+      },
+      "escalation": {
+        "training": {
+          "run_name": "train_country_week_logit_30d",
+          "artifact_path": "artifacts/forecasting/train/country_week_logit_30d",
+          "completed_at": "2026-03-28T10:30:00Z",
+          "model_name": "logit"
+        },
+        "calibration": {
+          "run_name": "country_week_logit",
+          "artifact_path": "artifacts/forecasting/calibration/country_week_logit",
+          "completed_at": "2026-03-28T10:45:00Z",
+          "model_name": "logit"
+        },
+        "backtest": {
+          "run_name": "country_week_logit",
+          "artifact_path": "artifacts/backtesting/run/country_week_logit",
+          "completed_at": "2026-03-28T11:00:00Z",
+          "model_name": "logit"
+        }
+      },
+      "structural": {
+        "training": {
+          "run_name": "train_country_week_onset_structural_90d",
+          "artifact_path": "artifacts/forecasting/train/country_week_onset_structural_90d",
+          "completed_at": "2026-03-28T09:45:00Z",
+          "model_name": "logit"
+        },
+        "calibration": {
+          "run_name": "country_week_onset_structural_90d",
+          "artifact_path": "artifacts/forecasting/calibration/country_week_onset_structural_90d",
+          "completed_at": "2026-03-28T10:00:00Z",
+          "model_name": "logit"
+        },
+        "backtest": {
+          "run_name": "country_week_onset_structural_90d",
+          "artifact_path": "artifacts/backtesting/run/country_week_onset_structural_90d",
+          "completed_at": "2026-03-28T10:15:00Z",
+          "model_name": "logit"
+        }
+      }
+    }
+  },
+  "forecast_snapshot": {
+    "forecast_as_of": "2026-03-28",
+    "lead_country_iso3": "LBN",
+    "lead_country_name": "Lebanon",
+    "predicted_conflict": {
+      "label": "Lebanon / Israel",
+      "countries": [
+        {
+          "iso3": "LBN",
+          "country_name": "Lebanon"
+        },
+        {
+          "iso3": "ISR",
+          "country_name": "Israel"
+        }
+      ],
+      "summary": "Lebanon and Israel remain the lead interstate pressure corridor in the published weekly snapshot.",
+      "report_slug": "lbn-latest",
+      "reason_source": "report_inputs",
+      "target_name": "country_week_onset_30d",
+      "horizon_days": 30
+    },
+    "primary_target": "onset",
+    "alert_type": "Onset Watch",
+    "no_clear_leader": false,
+    "coverage_count": 2,
+    "countries": [
+      {
+        "iso3": "LBN",
+        "country_name": "Lebanon",
+        "region_name": "Middle East",
+        "score": 0.84,
+        "delta": 0.06,
+        "forecast_as_of": "2026-03-28",
+        "freshness_tier": "fresh",
+        "rank": 1
+      },
+      {
+        "iso3": "ISR",
+        "country_name": "Israel",
+        "region_name": "Middle East",
+        "score": 0.79,
+        "delta": 0.03,
+        "forecast_as_of": "2026-03-28",
+        "freshness_tier": "fresh",
+        "rank": 2
+      }
+    ]
+  },
+  "model_card": {
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30,
+    "published_at": "2026-03-28T12:00:00Z",
+    "stale_after": "2026-04-18T12:00:00Z",
+    "baseline_used": false,
+    "primary_target": "onset",
+    "alert_type": "Onset Watch",
+    "model_status": "promoted",
+    "metrics": {
+      "brier_score": 0.14,
+      "roc_auc": 0.81,
+      "precision_at_10": 0.3,
+      "recall_at_5": 0.31,
+      "recall_at_10": 0.52,
+      "episode_recall": 0.44,
+      "false_alerts_per_true_alert": 1.0,
+      "no_clear_leader_rate": 0.14
+    },
+    "threshold_policy": {
+      "publish_top_n": 10,
+      "publish_threshold": 0.82,
+      "alert_threshold": 0.76,
+      "warning_threshold": 0.5,
+      "operating_threshold": 0.6
+    },
+    "provenance": {
+      "onset": {
+        "training": {
+          "run_name": "train_country_week_onset_logit_30d",
+          "artifact_path": "artifacts/forecasting/train/country_week_onset_logit_30d",
+          "completed_at": "2026-03-28T10:30:00Z",
+          "model_name": "logit"
+        },
+        "calibration": {
+          "run_name": "country_week_onset_logit",
+          "artifact_path": "artifacts/forecasting/calibration/country_week_onset_logit",
+          "completed_at": "2026-03-28T10:45:00Z",
+          "model_name": "logit"
+        },
+        "backtest": {
+          "run_name": "country_week_onset_logit",
+          "artifact_path": "artifacts/backtesting/run/country_week_onset_logit",
+          "completed_at": "2026-03-28T11:00:00Z",
+          "model_name": "logit"
+        }
+      },
+      "escalation": {
+        "training": {
+          "run_name": "train_country_week_logit_30d",
+          "artifact_path": "artifacts/forecasting/train/country_week_logit_30d",
+          "completed_at": "2026-03-28T10:30:00Z",
+          "model_name": "logit"
+        },
+        "calibration": {
+          "run_name": "country_week_logit",
+          "artifact_path": "artifacts/forecasting/calibration/country_week_logit",
+          "completed_at": "2026-03-28T10:45:00Z",
+          "model_name": "logit"
+        },
+        "backtest": {
+          "run_name": "country_week_logit",
+          "artifact_path": "artifacts/backtesting/run/country_week_logit",
+          "completed_at": "2026-03-28T11:00:00Z",
+          "model_name": "logit"
+        }
+      },
+      "structural": {
+        "training": {
+          "run_name": "train_country_week_onset_structural_90d",
+          "artifact_path": "artifacts/forecasting/train/country_week_onset_structural_90d",
+          "completed_at": "2026-03-28T09:45:00Z",
+          "model_name": "logit"
+        },
+        "calibration": {
+          "run_name": "country_week_onset_structural_90d",
+          "artifact_path": "artifacts/forecasting/calibration/country_week_onset_structural_90d",
+          "completed_at": "2026-03-28T10:00:00Z",
+          "model_name": "logit"
+        },
+        "backtest": {
+          "run_name": "country_week_onset_structural_90d",
+          "artifact_path": "artifacts/backtesting/run/country_week_onset_structural_90d",
+          "completed_at": "2026-03-28T10:15:00Z",
+          "model_name": "logit"
+        }
+      }
+    }
+  }
+}

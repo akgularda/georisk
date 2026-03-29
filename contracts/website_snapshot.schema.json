@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Website Snapshot Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest",
+    "forecast_snapshot",
+    "model_card"
+  ],
+  "properties": {
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "snapshot_id",
+        "published_at",
+        "fresh_until",
+        "stale_after",
+        "baseline_used",
+        "forecast_as_of",
+        "generated_at",
+        "coverage_count",
+        "top_country_iso3",
+        "top_country_name",
+        "predicted_conflict",
+        "primary_target",
+        "alert_type",
+        "model_status",
+        "no_clear_leader",
+        "provenance"
+      ],
+      "properties": {
+        "schema_version": { "type": "string" },
+        "snapshot_id": { "type": "string" },
+        "published_at": { "type": "string", "format": "date-time" },
+        "fresh_until": { "type": "string", "format": "date-time" },
+        "stale_after": { "type": "string", "format": "date-time" },
+        "baseline_used": { "type": "boolean" },
+        "forecast_as_of": { "type": "string", "format": "date" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "coverage_count": { "type": "integer", "minimum": 0 },
+        "top_country_iso3": { "type": "string" },
+        "top_country_name": { "type": "string" },
+        "predicted_conflict": { "$ref": "#/$defs/predicted_conflict" },
+        "primary_target": { "type": "string" },
+        "alert_type": { "type": "string" },
+        "model_status": { "type": "string" },
+        "no_clear_leader": { "type": "boolean" },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "onset",
+            "escalation",
+            "structural"
+          ],
+          "properties": {
+            "onset": {
+              "anyOf": [
+                { "$ref": "#/$defs/publication_target_provenance" },
+                { "type": "null" }
+              ]
+            },
+            "escalation": {
+              "anyOf": [
+                { "$ref": "#/$defs/publication_target_provenance" },
+                { "type": "null" }
+              ]
+            },
+            "structural": {
+              "anyOf": [
+                { "$ref": "#/$defs/publication_target_provenance" },
+                { "type": "null" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "forecast_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "forecast_as_of",
+        "lead_country_iso3",
+        "lead_country_name",
+        "predicted_conflict",
+        "primary_target",
+        "alert_type",
+        "no_clear_leader",
+        "coverage_count",
+        "countries"
+      ],
+      "properties": {
+        "forecast_as_of": { "type": "string", "format": "date" },
+        "lead_country_iso3": { "type": "string" },
+        "lead_country_name": { "type": "string" },
+        "predicted_conflict": { "$ref": "#/$defs/predicted_conflict" },
+        "primary_target": { "type": "string" },
+        "alert_type": { "type": "string" },
+        "no_clear_leader": { "type": "boolean" },
+        "coverage_count": { "type": "integer", "minimum": 0 },
+        "countries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "iso3",
+              "country_name",
+              "score",
+              "delta",
+              "forecast_as_of",
+              "freshness_tier"
+            ],
+            "properties": {
+              "iso3": { "type": "string" },
+              "country_name": { "type": "string" },
+              "region_name": { "type": ["string", "null"] },
+              "score": { "type": "number" },
+              "delta": { "type": "number" },
+              "forecast_as_of": { "type": "string", "format": "date" },
+              "freshness_tier": {
+                "type": "string",
+                "enum": ["fresh", "aging", "stale", "critical", "missing"]
+              },
+              "rank": {
+                "type": ["integer", "null"],
+                "minimum": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "model_card": { "$ref": "model_card.schema.json" }
+  },
+  "$defs": {
+    "publication_run_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_name",
+        "artifact_path",
+        "completed_at"
+      ],
+      "properties": {
+        "run_name": { "type": "string" },
+        "artifact_path": { "type": "string" },
+        "completed_at": { "type": "string", "format": "date-time" },
+        "model_name": { "type": ["string", "null"] }
+      }
+    },
+    "publication_target_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "training",
+        "calibration",
+        "backtest"
+      ],
+      "properties": {
+        "training": { "$ref": "#/$defs/publication_run_provenance" },
+        "calibration": { "$ref": "#/$defs/publication_run_provenance" },
+        "backtest": { "$ref": "#/$defs/publication_run_provenance" }
+      }
+    },
+    "predicted_conflict_country": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "country_name"
+      ],
+      "properties": {
+        "iso3": { "type": ["string", "null"] },
+        "country_name": { "type": "string" }
+      }
+    },
+    "predicted_conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "countries",
+        "reason_source",
+        "target_name",
+        "horizon_days"
+      ],
+      "properties": {
+        "label": { "type": "string" },
+        "countries": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/predicted_conflict_country" }
+        },
+        "summary": { "type": ["string", "null"] },
+        "report_slug": { "type": ["string", "null"] },
+        "reason_source": {
+          "type": "string",
+          "enum": ["report_inputs", "lead_country", "fallback"]
+        },
+        "target_name": { "type": "string" },
+        "horizon_days": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

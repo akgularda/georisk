@@ -1,0 +1,5 @@
+run_name: country_week_default
+model_name: prior_rate
+method: isotonic
+score_column: raw_score
+label_column: label

@@ -1,0 +1,5 @@
+observation_date,country_iso3,country_name,trade_exports_value_usd,trade_imports_value_usd,trade_exports_3m_change_pct,trade_imports_3m_change_pct
+2026-01-31,IRN,Iran,12000000000,15000000000,-2.1,3.4
+2026-03-20,IRN,Iran,13500000000,16000000000,4.0,6.2
+2026-03-26,IRN,Iran,13800000000,16100000000,4.5,6.5
+2026-03-20,TUR,Turkey,22000000000,23000000000,1.1,2.2

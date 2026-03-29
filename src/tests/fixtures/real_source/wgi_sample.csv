@@ -1,0 +1,5 @@
+country_iso3,country_name,year,voice_and_accountability,political_stability_and_absence_of_violence,government_effectiveness,regulatory_quality,rule_of_law,control_of_corruption,publication_ts_utc
+IRN,Iran,2023,-1.18,-1.47,-0.95,-0.84,-0.61,-0.67,2025-09-15T00:00:00Z
+IRN,Iran,2024,-1.10,-1.42,-0.91,-0.79,-0.58,-0.63,2025-09-15T00:00:00Z
+AFG,Afghanistan,2024,-1.85,-2.45,-2.10,-2.00,-2.20,-1.90,2025-09-15T00:00:00Z
+UKR,Ukraine,2024,-0.45,-1.10,-0.30,-0.20,-0.35,-0.40,2025-09-15T00:00:00Z

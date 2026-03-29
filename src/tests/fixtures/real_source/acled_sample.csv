@@ -1,0 +1,7 @@
+data_id,event_id_cnty,event_id_no_cnty,event_date,event_type,sub_event_type,actor1,assoc_actor_1,actor2,assoc_actor_2,country,admin1,admin2,location,latitude,longitude,fatalities,notes,source,timestamp
+1001,IRN001,1,2026-02-28,Protests,Peaceful protest,Workers,,Police,,Iran,Esfahan,Esfahan,Esfahan city,32.6546,51.6680,0,Workers protest wage arrears,Local Media,2026-02-28T10:00:00Z
+1002,IRN002,2,2026-03-03,Protests,Peaceful protest,Students,,Police,,Iran,Tehran,Tehran,Tehran city,35.6892,51.3890,0,Student protest in Tehran,Local Media,2026-03-04T12:00:00Z
+1003,IRN003,3,2026-03-19,Riots,Rioters,Crowd,,Police,,Iran,Tehran,Tehran,Tehran city,35.6892,51.3890,1,Riots after fuel price changes,Newswire,2026-03-20T12:00:00Z
+1004,IRN004,4,2026-03-20,Violence against civilians,Attack,Security Forces,,Civilians,,Iran,Khorasan Razavi,Mashhad,Mashhad city,36.2605,59.6168,2,Security forces attack civilians,Newswire,2026-03-21T12:00:00Z
+1005,IRN005,5,2026-03-22,Explosions/Remote violence,Bombing,Militant group,,Military,,Iran,Khuzestan,Ahvaz,Ahvaz city,31.3183,48.6706,3,Explosion near base,Newswire,2026-03-22T18:00:00Z
+1006,IRN006,6,2026-03-23,Strategic developments,Arrests,Govt,,Opposition,,Iran,Tehran,Tehran,Tehran city,35.6892,51.3890,0,Arrests of activists,Local Media,2026-03-23T09:00:00Z

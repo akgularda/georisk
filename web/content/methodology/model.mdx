@@ -1,0 +1,63 @@
+export const frontmatter = {
+  title: "Onset-first model framing",
+  slug: "model",
+  date: "2026-03-28",
+  updatedAt: "2026-03-28T21:15:00Z",
+  summary: "How GeoRisk separates onset from escalation, what each alert type means, and why the site can abstain.",
+  tags: ["model", "onset", "escalation", "alerting"],
+  draft: false
+};
+
+<h2 id="primary-target">Primary target</h2>
+
+GeoRisk is designed first as an early-warning system for conflict onset. The primary operational question is:
+
+> Which country is most likely to move from a quiet or low-violence state into meaningful organized violence within the next 30 days?
+
+That target is distinct from escalation. A country can already be active, dangerous, and newsworthy without being an onset case.
+
+<h2 id="secondary-target">Secondary target</h2>
+
+Escalation remains an operational surface, but it is secondary. Escalation answers a different question:
+
+> Which already-active country is most likely to worsen materially in the next 30 days?
+
+The site keeps both concepts visible so users can tell whether the model is trying to warn before a conflict breaks out or track an already-active theater.
+
+<h2 id="alert-types">Alert types</h2>
+
+The site publishes one of four machine-backed alert states:
+
+- `Onset Watch`
+- `Escalation Watch`
+- `Monitoring Only`
+- `No Clear Leader`
+
+`Onset Watch` is the desired early-warning output. `Escalation Watch` is a secondary operational state for active theaters. `Monitoring Only` means the system has signal but not enough evidence for a promoted alert. `No Clear Leader` means the ranking is too weak or too tied to justify a sharp public lead.
+
+<h2 id="scores">Score interpretation</h2>
+
+The score is a ranked probability surface, not a claim that conflict is predetermined. It should be read as a relative short-horizon warning signal conditioned on the current data snapshot.
+
+Users should care less about the raw number in isolation and more about:
+
+- which target is active
+- whether the model is promoted or still monitoring
+- whether the system abstained
+- how the current model performed in walk-forward backtests
+
+<h2 id="features">Feature mix</h2>
+
+The model uses a mixed signal stack:
+
+- recent event intensity and media attention
+- acceleration and delta features
+- quiet-period flags for onset logic
+- spillover and neighbor exposure
+- macro, governance, climate, trade, and humanitarian context
+
+The live system now uses a two-layer design. A slower 90-day structural onset prior estimates medium-horizon susceptibility, and the faster weekly 30-day onset trigger consumes that prior alongside recent trigger signals.
+
+<h2 id="language">Language discipline</h2>
+
+GeoRisk does not claim certainty. It claims that the short-horizon probability of onset or escalation has increased relative to the current panel. That is a narrower and more defensible statement than predicting a specific political outcome with certainty.

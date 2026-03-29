@@ -1,0 +1,5 @@
+country_iso3,country_name,observation_date,climate_night_lights_anomaly_pct,climate_night_lights_zscore
+IRN,Iran,2026-03-20,-3.4,-0.6
+ISR,Israel,2026-03-20,-1.8,-0.3
+SDN,Sudan,2026-03-20,-11.2,-2.1
+UKR,Ukraine,2026-03-20,-6.7,-1.2

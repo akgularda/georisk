@@ -1,0 +1,29 @@
+{
+  "iso3": "USA",
+  "country_name": "United States",
+  "region_name": null,
+  "report_slug": "usa-latest",
+  "summary": "United States has no observed forward label outcome yet for the latest country-week snapshot.",
+  "chronology": [
+    "Week of 2026-03-23: 0 ACLED events in the trailing 7 days.",
+    "Trailing 28-day ACLED events: 0.",
+    "GDELT event count in the trailing 7 days: 16."
+  ],
+  "top_drivers": [
+    "ACLED events (28d): 0",
+    "GDELT events (7d): 16",
+    "Food price index: 104.7"
+  ],
+  "forecast": {
+    "score": 0.0004,
+    "delta": 0.0,
+    "rank": 12,
+    "forecast_as_of": "2026-03-23",
+    "freshness_tier": "fresh",
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "source_snapshot_hash": "2cbc01e95e0c471ced22f6e1d9fc324a4fb36bdd4109a40c931db3835dbabc49"
+}

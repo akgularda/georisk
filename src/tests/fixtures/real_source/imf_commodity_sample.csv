@@ -1,0 +1,4 @@
+observation_date,market_oil_price_usd_per_barrel,market_gas_price_index,market_fertilizer_price_index,market_commodity_price_index
+2026-03-01,78.0,100.0,145.0,120.0
+2026-03-20,84.5,112.0,152.0,126.0
+2026-03-26,81.0,109.0,149.0,123.0

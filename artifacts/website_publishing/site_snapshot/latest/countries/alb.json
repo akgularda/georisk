@@ -1,0 +1,29 @@
+{
+  "iso3": "ALB",
+  "country_name": "Albania",
+  "region_name": "Europe",
+  "report_slug": "alb-latest",
+  "summary": "Albania has no observed forward label outcome yet for the latest country-week snapshot.",
+  "chronology": [
+    "Week of 2026-03-23: 0 ACLED events in the trailing 7 days.",
+    "Trailing 28-day ACLED events: 0.",
+    "GDELT event count in the trailing 7 days: 0."
+  ],
+  "top_drivers": [
+    "ACLED events (28d): 0",
+    "GDELT events (7d): 0",
+    "Food price index: 104.7"
+  ],
+  "forecast": {
+    "score": 0.0,
+    "delta": 0.0,
+    "rank": 19,
+    "forecast_as_of": "2026-03-23",
+    "freshness_tier": "fresh",
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "source_snapshot_hash": "5af338f8f24f5bd86a5c9186c76f783cb436d2dbec25e95fb0f78569b7db8f97"
+}

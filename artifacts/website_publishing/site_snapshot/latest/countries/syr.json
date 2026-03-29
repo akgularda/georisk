@@ -1,0 +1,29 @@
+{
+  "iso3": "SYR",
+  "country_name": "Syrian Arab Republic",
+  "region_name": "Asia",
+  "report_slug": "syr-latest",
+  "summary": "Syrian Arab Republic has no observed forward label outcome yet for the latest country-week snapshot.",
+  "chronology": [
+    "Week of 2026-03-23: 0 ACLED events in the trailing 7 days.",
+    "Trailing 28-day ACLED events: 0.",
+    "GDELT event count in the trailing 7 days: 0."
+  ],
+  "top_drivers": [
+    "ACLED events (28d): 0",
+    "GDELT events (7d): 0",
+    "Food price index: 104.7"
+  ],
+  "forecast": {
+    "score": 0.0004,
+    "delta": 0.0,
+    "rank": 14,
+    "forecast_as_of": "2026-03-23",
+    "freshness_tier": "fresh",
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "source_snapshot_hash": "51d8f2b6e59ff5fb86b4970a915bcfb6200c2ed2e1db8e248c2b742806c9370d"
+}

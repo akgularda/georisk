@@ -1,0 +1,29 @@
+{
+  "iso3": "TUR",
+  "country_name": "Turkey",
+  "region_name": "Asia",
+  "report_slug": "tur-latest",
+  "summary": "Turkiye has no observed forward label outcome yet for the latest country-week snapshot.",
+  "chronology": [
+    "Week of 2026-03-23: 0 ACLED events in the trailing 7 days.",
+    "Trailing 28-day ACLED events: 0.",
+    "GDELT event count in the trailing 7 days: 0."
+  ],
+  "top_drivers": [
+    "ACLED events (28d): 0",
+    "GDELT events (7d): 0",
+    "Food price index: 104.7"
+  ],
+  "forecast": {
+    "score": 0.0,
+    "delta": -0.0004,
+    "rank": 29,
+    "forecast_as_of": "2026-03-23",
+    "freshness_tier": "fresh",
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "source_snapshot_hash": "7446e165e99be637a013c8e07f00e8e88fc06999c61f5556c10d4ec710f8e677"
+}

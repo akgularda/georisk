@@ -1,0 +1,5 @@
+run_name: country_week_onset_structural_90d
+model_name: logit
+method: isotonic
+score_column: raw_score
+label_column: label

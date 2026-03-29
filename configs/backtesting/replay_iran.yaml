@@ -1,0 +1,5 @@
+run_name: replay_iran
+backtest_run_name: country_week
+entity_id: IRN
+model_name: prior_rate
+max_rows: 12

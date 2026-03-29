@@ -1,0 +1,32 @@
+{
+  "status": "ok",
+  "freshness_tier": "fresh",
+  "published_at": "2026-03-29T00:34:18.086724+00:00",
+  "forecast_as_of": "2026-03-23",
+  "baseline_used": false,
+  "coverage_count": 30,
+  "predicted_conflict": {
+    "label": "Australia",
+    "countries": [
+      {
+        "iso3": "AUS",
+        "country_name": "Australia"
+      }
+    ],
+    "summary": "Australia has no observed forward label outcome yet for the latest country-week snapshot.",
+    "report_slug": "aus-latest",
+    "reason_source": "report_inputs",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "primary_target": "onset",
+  "alert_type": "No Clear Leader",
+  "model_status": "monitoring_only",
+  "no_clear_leader": true,
+  "publish_threshold": 0.008849557522123894,
+  "alert_threshold": 0.008849557522123894,
+  "lead_country_iso3": "AUS",
+  "lead_country_name": "Australia",
+  "prediction_file": "C:\\Users\\akgul\\Downloads\\codex_prompts_georisk\\georisk\\artifacts\\forecasting\\predict\\country_week_onset_logit\\predictions.parquet",
+  "lead_tie_count": 16
+}

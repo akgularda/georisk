@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Model Card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "model_name",
+    "model_version",
+    "target_name",
+    "horizon_days",
+    "published_at",
+    "stale_after",
+    "baseline_used",
+    "primary_target",
+    "alert_type",
+    "model_status",
+    "metrics",
+    "threshold_policy",
+    "provenance"
+  ],
+  "properties": {
+    "model_name": { "type": "string" },
+    "model_version": { "type": "string" },
+    "target_name": { "type": "string" },
+    "horizon_days": { "type": "integer", "minimum": 1 },
+    "published_at": { "type": "string", "format": "date-time" },
+    "stale_after": { "type": "string", "format": "date-time" },
+    "baseline_used": { "type": "boolean" },
+    "primary_target": { "type": "string" },
+    "alert_type": { "type": "string" },
+    "model_status": { "type": "string" },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "brier_score",
+        "roc_auc",
+        "precision_at_10",
+        "recall_at_5",
+        "recall_at_10",
+        "episode_recall",
+        "false_alerts_per_true_alert",
+        "no_clear_leader_rate"
+      ],
+      "properties": {
+        "brier_score": { "type": "number" },
+        "roc_auc": { "type": "number" },
+        "precision_at_10": { "type": "number" },
+        "recall_at_5": { "type": ["number", "null"] },
+        "recall_at_10": { "type": ["number", "null"] },
+        "episode_recall": { "type": ["number", "null"] },
+        "false_alerts_per_true_alert": { "type": ["number", "null"] },
+        "no_clear_leader_rate": { "type": ["number", "null"] }
+      }
+    },
+    "threshold_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publish_top_n",
+        "publish_threshold",
+        "alert_threshold",
+        "warning_threshold"
+      ],
+      "properties": {
+        "publish_top_n": { "type": "integer", "minimum": 1 },
+        "publish_threshold": {
+          "type": ["number", "null"],
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "alert_threshold": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "warning_threshold": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "operating_threshold": {
+          "type": ["number", "null"],
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "onset",
+        "escalation",
+        "structural"
+      ],
+      "properties": {
+        "onset": {
+          "anyOf": [
+            { "$ref": "#/$defs/publication_target_provenance" },
+            { "type": "null" }
+          ]
+        },
+        "escalation": {
+          "anyOf": [
+            { "$ref": "#/$defs/publication_target_provenance" },
+            { "type": "null" }
+          ]
+        },
+        "structural": {
+          "anyOf": [
+            { "$ref": "#/$defs/publication_target_provenance" },
+            { "type": "null" }
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "publication_run_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_name",
+        "artifact_path",
+        "completed_at"
+      ],
+      "properties": {
+        "run_name": { "type": "string" },
+        "artifact_path": { "type": "string" },
+        "completed_at": { "type": "string", "format": "date-time" },
+        "model_name": { "type": ["string", "null"] }
+      }
+    },
+    "publication_target_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "training",
+        "calibration",
+        "backtest"
+      ],
+      "properties": {
+        "training": { "$ref": "#/$defs/publication_run_provenance" },
+        "calibration": { "$ref": "#/$defs/publication_run_provenance" },
+        "backtest": { "$ref": "#/$defs/publication_run_provenance" }
+      }
+    }
+  }
+}

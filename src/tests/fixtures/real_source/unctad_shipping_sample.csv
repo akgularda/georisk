@@ -1,0 +1,5 @@
+observation_date,country_iso3,country_name,shipping_lsci_index,shipping_port_connectivity_index
+2026-01-31,IRN,Iran,42.5,38.0
+2026-03-20,IRN,Iran,44.1,39.6
+2026-03-26,IRN,Iran,44.8,40.2
+2026-03-20,TUR,Turkey,60.3,55.4

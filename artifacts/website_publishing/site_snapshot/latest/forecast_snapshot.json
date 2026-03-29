@@ -1,0 +1,325 @@
+{
+  "forecast_as_of": "2026-03-23",
+  "lead_country_iso3": "AUS",
+  "lead_country_name": "Australia",
+  "predicted_conflict": {
+    "label": "Australia",
+    "countries": [
+      {
+        "iso3": "AUS",
+        "country_name": "Australia"
+      }
+    ],
+    "summary": "Australia has no observed forward label outcome yet for the latest country-week snapshot.",
+    "report_slug": "aus-latest",
+    "reason_source": "report_inputs",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "primary_target": "onset",
+  "alert_type": "No Clear Leader",
+  "no_clear_leader": true,
+  "coverage_count": 30,
+  "countries": [
+    {
+      "iso3": "AUS",
+      "country_name": "Australia",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 1
+    },
+    {
+      "iso3": "BGD",
+      "country_name": "Bangladesh",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 2
+    },
+    {
+      "iso3": "CHN",
+      "country_name": "China",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 3
+    },
+    {
+      "iso3": "FRA",
+      "country_name": "France",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 4
+    },
+    {
+      "iso3": "IND",
+      "country_name": "India",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 5
+    },
+    {
+      "iso3": "NGA",
+      "country_name": "Nigeria",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 6
+    },
+    {
+      "iso3": "PHL",
+      "country_name": "Philippines",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 7
+    },
+    {
+      "iso3": "ZAF",
+      "country_name": "South Africa",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 8
+    },
+    {
+      "iso3": "ESP",
+      "country_name": "Spain",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 9
+    },
+    {
+      "iso3": "LKA",
+      "country_name": "Sri Lanka",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 10
+    },
+    {
+      "iso3": "GBR",
+      "country_name": "United Kingdom",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 11
+    },
+    {
+      "iso3": "USA",
+      "country_name": "United States",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 12
+    },
+    {
+      "iso3": "RUS",
+      "country_name": "Russia",
+      "region_name": null,
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 13
+    },
+    {
+      "iso3": "SYR",
+      "country_name": "Syrian Arab Republic",
+      "region_name": "Asia",
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 14
+    },
+    {
+      "iso3": "COL",
+      "country_name": "Colombia",
+      "region_name": "Americas",
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 15
+    },
+    {
+      "iso3": "AIA",
+      "country_name": "Anguilla",
+      "region_name": "Americas",
+      "score": 0.0004,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 16
+    },
+    {
+      "iso3": "AND",
+      "country_name": "Andorra",
+      "region_name": "Europe",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 17
+    },
+    {
+      "iso3": "AFG",
+      "country_name": "Afghanistan",
+      "region_name": "Asia",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 18
+    },
+    {
+      "iso3": "ALB",
+      "country_name": "Albania",
+      "region_name": "Europe",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 19
+    },
+    {
+      "iso3": "DZA",
+      "country_name": "Algeria",
+      "region_name": "Africa",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 20
+    },
+    {
+      "iso3": "AGO",
+      "country_name": "Angola",
+      "region_name": "Africa",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 21
+    },
+    {
+      "iso3": "ATG",
+      "country_name": "Antigua and Barbuda",
+      "region_name": null,
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 22
+    },
+    {
+      "iso3": "ARG",
+      "country_name": "Argentina",
+      "region_name": "Americas",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 23
+    },
+    {
+      "iso3": "ARM",
+      "country_name": "Armenia",
+      "region_name": "Asia",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 24
+    },
+    {
+      "iso3": "EGY",
+      "country_name": "Egypt",
+      "region_name": "Africa",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 25
+    },
+    {
+      "iso3": "IRN",
+      "country_name": "Iran",
+      "region_name": "Asia",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 26
+    },
+    {
+      "iso3": "ISR",
+      "country_name": "Israel",
+      "region_name": "Asia",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 27
+    },
+    {
+      "iso3": "SDN",
+      "country_name": "Sudan",
+      "region_name": "Africa",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 28
+    },
+    {
+      "iso3": "TUR",
+      "country_name": "Turkey",
+      "region_name": "Asia",
+      "score": 0.0,
+      "delta": -0.0004,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 29
+    },
+    {
+      "iso3": "UKR",
+      "country_name": "Ukraine",
+      "region_name": "Europe",
+      "score": 0.0,
+      "delta": 0.0,
+      "forecast_as_of": "2026-03-23",
+      "freshness_tier": "fresh",
+      "rank": 30
+    }
+  ]
+}

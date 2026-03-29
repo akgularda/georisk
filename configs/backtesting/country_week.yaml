@@ -1,0 +1,84 @@
+run_name: country_week
+dataset_path: data/gold/country_week_features/country_week_features.parquet
+target_name: country_week_escalation_30d
+horizon_days: 30
+label_column: label_escalation_30d
+primary_model: prior_rate
+prediction_threshold: 0.5
+seed: 7
+calibration_method: isotonic
+dataset_spec:
+  entity_id_column: country_iso3
+  entity_name_column: country_iso3
+  date_column: week_start_date
+  unit_of_analysis: country_week
+  group_columns: []
+  feature_columns:
+    - gdelt_event_count_7d
+    - gdelt_avg_goldstein_7d
+    - gdelt_avg_event_tone_7d
+    - gdelt_num_mentions_7d
+    - gdelt_num_articles_7d
+    - gdelt_document_count_7d
+    - gdelt_avg_document_tone_7d
+    - acled_event_count_7d
+    - acled_fatalities_sum_7d
+    - acled_protest_count_7d
+    - acled_riot_count_7d
+    - acled_violence_against_civilians_count_7d
+    - acled_explosions_remote_violence_count_7d
+    - acled_strategic_developments_count_7d
+    - acled_distinct_actor1_count_7d
+    - acled_distinct_actor2_count_7d
+    - acled_event_count_28d
+    - acled_fatalities_sum_28d
+    - market_oil_price_usd_per_barrel
+    - market_gas_price_index
+    - market_fertilizer_price_index
+    - market_commodity_price_index
+    - food_price_index
+    - food_cereal_price_index
+    - trade_exports_value_usd
+    - trade_imports_value_usd
+    - trade_exports_3m_change_pct
+    - trade_imports_3m_change_pct
+    - shipping_lsci_index
+    - shipping_port_connectivity_index
+    - governance_voice_and_accountability
+    - governance_political_stability
+    - governance_government_effectiveness
+    - governance_regulatory_quality
+    - governance_rule_of_law
+    - governance_control_of_corruption
+    - governance_score
+    - days_to_next_election
+    - days_since_last_election
+    - election_upcoming_30d
+    - election_upcoming_90d
+    - election_recent_30d
+    - election_recent_90d
+    - climate_drought_severity_index
+    - climate_temperature_anomaly_c
+    - climate_precipitation_anomaly_pct
+    - climate_night_lights_anomaly_pct
+    - climate_night_lights_zscore
+    - security_military_expenditure_usd
+    - security_military_expenditure_pct_gdp
+    - security_arms_import_volume_index
+    - ucdp_history_event_count_52w
+    - ucdp_history_best_deaths_52w
+    - ucdp_history_state_based_events_52w
+    - macro_gdp_growth_annual_pct
+    - macro_cpi_yoy
+    - macro_population_total
+    - humanitarian_refugees
+    - humanitarian_asylum_seekers
+    - humanitarian_idps
+split:
+  min_train_days: 1
+  validation_window_days: 1
+  step_days: 1
+  max_splits: 6
+models:
+  - name: prior_rate
+    kind: prior_rate

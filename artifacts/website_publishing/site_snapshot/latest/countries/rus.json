@@ -1,0 +1,29 @@
+{
+  "iso3": "RUS",
+  "country_name": "Russia",
+  "region_name": null,
+  "report_slug": "rus-latest",
+  "summary": "Russian Federation has no observed forward label outcome yet for the latest country-week snapshot.",
+  "chronology": [
+    "Week of 2026-03-23: 0 ACLED events in the trailing 7 days.",
+    "Trailing 28-day ACLED events: 0.",
+    "GDELT event count in the trailing 7 days: 1."
+  ],
+  "top_drivers": [
+    "ACLED events (28d): 0",
+    "GDELT events (7d): 1",
+    "Food price index: 104.7"
+  ],
+  "forecast": {
+    "score": 0.0004,
+    "delta": 0.0,
+    "rank": 13,
+    "forecast_as_of": "2026-03-23",
+    "freshness_tier": "fresh",
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "source_snapshot_hash": "fe54e89dfc8dd321f8882dfee2840d6c538b843fb1e311da0ac4658abcb2cabf"
+}

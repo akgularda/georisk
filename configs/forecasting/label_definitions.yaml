@@ -1,0 +1,29 @@
+targets:
+  - name: organized_violence_onset
+    kind: onset
+    source_event_column: organized_violence_events
+    lookback_days: 30
+    quiet_threshold: 0.0
+    forecast_threshold: 3.0
+  - name: organized_violence_escalation
+    kind: escalation
+    source_event_column: organized_violence_events
+    lookback_days: 30
+    forecast_threshold: 5.0
+    growth_multiplier: 1.5
+  - name: major_unrest_escalation
+    kind: escalation
+    source_event_column: protest_events
+    lookback_days: 30
+    forecast_threshold: 6.0
+    growth_multiplier: 1.5
+  - name: interstate_confrontation_risk
+    kind: threshold
+    source_event_column: interstate_tension_events
+    lookback_days: 30
+    forecast_threshold: 2.0
+  - name: humanitarian_deterioration_risk
+    kind: threshold
+    source_event_column: humanitarian_displacement_flow
+    lookback_days: 30
+    forecast_threshold: 150.0

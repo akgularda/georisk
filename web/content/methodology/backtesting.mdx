@@ -1,0 +1,78 @@
+export const frontmatter = {
+  title: "Backtesting, thresholds, and abstention",
+  slug: "backtesting",
+  date: "2026-03-28",
+  updatedAt: "2026-03-28T21:15:00Z",
+  summary: "How GeoRisk selects operating thresholds, compares challengers to baseline, and decides when not to force a lead country.",
+  tags: ["backtesting", "validation", "calibration", "abstention"],
+  draft: false
+};
+
+<h2 id="current-state">Current operational state</h2>
+
+As of March 28, 2026, the live site is onset-first by policy, but it is still running in a monitoring-grade state rather than a promoted alerting state.
+
+- Primary target: `onset`
+- Published alert type: `No Clear Leader`
+- Model status: `monitoring_only`
+- Published lead tie count: `16`
+
+That is intentional. The site does not force a dramatic headline when the ranking is flat or the promoted model has not cleared the publication rule.
+
+<h2 id="walk-forward">Walk-forward evaluation</h2>
+
+Forecasts are evaluated with strictly time-ordered walk-forward splits. GeoRisk does not randomize history and pretend the future was known in advance. Each validation slice is scored only after training on earlier periods.
+
+This matters because conflict data are path-dependent, sparse, and revised over time. A valid early-warning system has to prove that it can surface episodes out of sample, not only fit them in retrospect.
+
+<h2 id="thresholds">Threshold selection</h2>
+
+GeoRisk no longer treats `0.5` as the public operating rule for rare-event forecasting. Thresholds are selected from backtests and published with the snapshot bundle.
+
+The current live snapshot published on March 28, 2026 uses:
+
+- `publish_threshold`: `0.008849557522123894`
+- `alert_threshold`: `0.008849557522123894`
+
+Those thresholds are chosen against rare-event operating behavior rather than a generic classifier default. The system tracks:
+
+- recall@5
+- recall@10
+- episode recall
+- median lead days
+- false alerts per true alert
+- no-clear-leader rate
+
+<h2 id="abstention">Abstention policy</h2>
+
+`No Clear Leader` is a real model state, not a fallback label added for presentation. GeoRisk publishes abstention when any of these conditions apply:
+
+- no country clears the publication threshold
+- the top score is too close to the next score
+- the top score belongs to a large tie set
+- the preferred model did not beat the baseline on the promotion gate
+
+This is a credibility rule. For an early-warning system, admitting weak separation is better than inventing false precision.
+
+<h2 id="promotion">Promotion gate</h2>
+
+A richer model does not automatically earn the homepage. A candidate is promoted only if it beats the explicit baseline on rare-event operating metrics.
+
+The current onset backtest artifact on March 28, 2026 reports:
+
+- top-performing model: `prior_rate`
+- candidate model: `logit`
+- candidate delta PR AUC versus baseline: negative
+- episode recall: `1.0`
+- false alerts per true alert: `4.0`
+- no-clear-leader rate: `0.9484848484848485`
+
+Because the richer candidate did not clearly beat baseline on the full promotion rule, the live site remains in monitoring mode and surfaces `No Clear Leader` instead of overstating maturity.
+
+<h2 id="calibration">Calibration</h2>
+
+Probability outputs are calibrated after model training so the published score behaves more like an interpretable risk estimate and less like a raw ranking artifact. Calibration improves comparability, but it does not rescue a weak model. Calibration is evaluated after the walk-forward split, not instead of it.
+
+<h2 id="limitations">Limitations</h2>
+
+Backtests still understate the real difficulty of geopolitical early warning. Revisions, censorship, sparse onset episodes, and missing local context all limit what the current stack can prove. GeoRisk should be treated as a disciplined warning system under active hardening, not as an oracle.

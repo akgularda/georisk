@@ -1,0 +1,3 @@
+run_name: country_week_onset_logit
+model_name: logit
+top_n_drivers: 5

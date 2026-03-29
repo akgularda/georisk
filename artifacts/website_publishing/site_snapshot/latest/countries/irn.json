@@ -1,0 +1,29 @@
+{
+  "iso3": "IRN",
+  "country_name": "Iran",
+  "region_name": "Asia",
+  "report_slug": "irn-latest",
+  "summary": "Iran, Islamic Rep. has no observed forward label outcome yet for the latest country-week snapshot.",
+  "chronology": [
+    "Week of 2026-03-23: 4 ACLED events in the trailing 7 days.",
+    "Trailing 28-day ACLED events: 6.",
+    "GDELT event count in the trailing 7 days: 7."
+  ],
+  "top_drivers": [
+    "ACLED events (28d): 6",
+    "GDELT events (7d): 7",
+    "Food price index: 104.7"
+  ],
+  "forecast": {
+    "score": 0.0,
+    "delta": 0.0,
+    "rank": 26,
+    "forecast_as_of": "2026-03-23",
+    "freshness_tier": "fresh",
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "source_snapshot_hash": "415499965efe4db81e951a468bd8b1217c47cf64247a6541bdc812d3687d89f4"
+}

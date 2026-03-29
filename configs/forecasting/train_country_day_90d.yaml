@@ -1,0 +1,57 @@
+run_name: country_day_90d
+dataset_path: data/fixtures/synthetic_country_day.csv
+target_name: organized_violence_onset
+horizon_days: 90
+primary_model: weighted_ensemble
+prediction_threshold: 0.5
+seed: 7
+dataset_spec:
+  entity_id_column: entity_id
+  entity_name_column: entity_name
+  date_column: as_of_date
+  unit_of_analysis: country_day
+  group_columns:
+    - region
+    - fragility_bucket
+  feature_columns:
+    - lag_1d_organized_violence_events
+    - lag_7d_organized_violence_events
+    - lag_7d_protest_events
+    - lag_7d_displacement_flow
+    - rolling_14d_violence_mean
+    - rolling_30d_violence_volatility
+    - delta_7d_vs_30d_violence
+    - zscore_30d_news_volume
+    - news_volume_7d
+    - news_tone_7d
+    - macro_stress_index
+    - shipping_disruption_index
+    - climate_stress_index
+    - neighbor_spillover_index
+    - structural_fragility_index
+    - missing_macro_flag
+split:
+  min_train_days: 120
+  validation_window_days: 30
+  step_days: 30
+models:
+  - name: prior_rate
+    kind: prior_rate
+  - name: lagged_events_logit
+    kind: logistic_regression
+    params:
+      max_iter: 500
+  - name: lightgbm
+    kind: lightgbm
+    params:
+      n_estimators: 100
+      learning_rate: 0.05
+      num_leaves: 15
+ensemble:
+  name: weighted_ensemble
+  members:
+    - lagged_events_logit
+    - lightgbm
+  weights:
+    - 0.35
+    - 0.65

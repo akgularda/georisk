@@ -1,0 +1,29 @@
+{
+  "iso3": "NGA",
+  "country_name": "Nigeria",
+  "region_name": null,
+  "report_slug": "nga-latest",
+  "summary": "Nigeria has no observed forward label outcome yet for the latest country-week snapshot.",
+  "chronology": [
+    "Week of 2026-03-23: 0 ACLED events in the trailing 7 days.",
+    "Trailing 28-day ACLED events: 0.",
+    "GDELT event count in the trailing 7 days: 5."
+  ],
+  "top_drivers": [
+    "ACLED events (28d): 0",
+    "GDELT events (7d): 5",
+    "Food price index: 104.7"
+  ],
+  "forecast": {
+    "score": 0.0004,
+    "delta": 0.0,
+    "rank": 6,
+    "forecast_as_of": "2026-03-23",
+    "freshness_tier": "fresh",
+    "model_name": "logit",
+    "model_version": "country_week_onset_logit_30d",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "source_snapshot_hash": "5e5e35538878bad2c4fbd72fd8c798b41fc435f02478c2bfe7f73f09cc4f8bf9"
+}

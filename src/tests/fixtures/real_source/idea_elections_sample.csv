@@ -1,0 +1,5 @@
+country_iso3,country_name,election_date,election_type,election_name,status,publication_ts_utc
+IRN,Iran,2026-03-01,parliamentary,Majles election,held,2026-03-01T00:00:00Z
+IRN,Iran,2026-04-12,presidential,Presidential election,scheduled,2026-03-20T00:00:00Z
+AFG,Afghanistan,2026-05-15,national,National assembly election,scheduled,2026-03-20T00:00:00Z
+UKR,Ukraine,2025-10-01,local,Local election,held,2025-10-01T00:00:00Z

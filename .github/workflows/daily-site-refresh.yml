@@ -1,0 +1,88 @@
+name: Daily Site Refresh
+
+on:
+  schedule:
+    - cron: "30 3 * * *" # 06:30 Europe/Istanbul
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-site-refresh-pages
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .[dev]
+      - name: Verify automation and publishing contracts
+        run: python -m pytest src/tests/common/test_backend_refresh.py src/tests/website_publishing -q
+      - name: Run daily backend refresh
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL }}
+          OPENROUTER_BASE_URL: ${{ vars.OPENROUTER_BASE_URL }}
+        run: python scripts/run_backend_refresh.py --skip-revalidate
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
+      - name: Validate content
+        working-directory: web
+        run: npm run content:validate
+      - name: Lint web
+        working-directory: web
+        run: npm run lint
+      - name: Build static GitHub Pages site
+        working-directory: web
+        env:
+          GITHUB_PAGES: "true"
+          PAGES_BASE_PATH: ${{ vars.PAGES_BASE_PATH }}
+        run: npm run build
+      - name: Verify exported site artifact
+        run: |
+          test -f web/out/index.html
+          test -f web/out/api/health.json
+      - name: Upload backend refresh logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-refresh-logs
+          path: artifacts/ops/*.log
+          if-no-files-found: warn
+      - uses: actions/configure-pages@v5
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/out
+
+  deploy:
+    needs: refresh
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

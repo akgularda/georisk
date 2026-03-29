@@ -1,0 +1,40 @@
+name: Web Verification
+
+on:
+  push:
+    paths:
+      - "web/**"
+      - "docs/website_operations.md"
+      - "src/website_publishing/**"
+      - ".github/workflows/web-publishing.yml"
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
+      - name: Validate content
+        working-directory: web
+        run: npm run content:validate
+      - name: Lint web
+        working-directory: web
+        run: npm run lint
+      - name: Build web
+        working-directory: web
+        env:
+          GITHUB_PAGES: "true"
+          PAGES_BASE_PATH: ${{ vars.PAGES_BASE_PATH }}
+        run: npm run build
+      - name: Verify exported site artifact
+        run: |
+          test -f web/out/index.html
+          test -f web/out/api/health.json

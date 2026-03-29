@@ -1,0 +1,30 @@
+run_name: country_day_default
+dataset_path: data/fixtures/synthetic_country_day.csv
+model_name: weighted_ensemble
+top_n_drivers: 5
+prediction_output_name: predictions.parquet
+dataset_spec:
+  entity_id_column: entity_id
+  entity_name_column: entity_name
+  date_column: as_of_date
+  unit_of_analysis: country_day
+  group_columns:
+    - region
+    - fragility_bucket
+  feature_columns:
+    - lag_1d_organized_violence_events
+    - lag_7d_organized_violence_events
+    - lag_7d_protest_events
+    - lag_7d_displacement_flow
+    - rolling_14d_violence_mean
+    - rolling_30d_violence_volatility
+    - delta_7d_vs_30d_violence
+    - zscore_30d_news_volume
+    - news_volume_7d
+    - news_tone_7d
+    - macro_stress_index
+    - shipping_disruption_index
+    - climate_stress_index
+    - neighbor_spillover_index
+    - structural_fragility_index
+    - missing_macro_flag

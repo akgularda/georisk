@@ -1,0 +1,54 @@
+pipeline_kind: country_week_features
+run_name: country_week_features
+storage:
+  storage_root: data
+acled:
+  snapshot_file: src/tests/fixtures/real_source/acled_sample.csv
+imf:
+  snapshot_file: src/tests/fixtures/real_source/imf_commodity_sample.csv
+fao:
+  snapshot_file: src/tests/fixtures/real_source/fao_food_price_sample.csv
+idea:
+  snapshot_file: src/tests/fixtures/real_source/idea_elections_sample.csv
+noaa:
+  snapshot_file: src/tests/fixtures/real_source/noaa_climate_sample.csv
+  publication_ts_utc: 2026-03-20T00:00:00Z
+sipri:
+  snapshot_file: src/tests/fixtures/real_source/sipri_security_sample.csv
+  publication_ts_utc: 2026-03-20T00:00:00Z
+nasa_black_marble:
+  snapshot_file: src/tests/fixtures/real_source/nasa_black_marble_sample.csv
+  publication_ts_utc: 2026-03-20T00:00:00Z
+wgi:
+  snapshot_file: src/tests/fixtures/real_source/wgi_sample.csv
+  publication_ts_utc: 2025-09-15T00:00:00Z
+un_comtrade:
+  snapshot_file: src/tests/fixtures/real_source/un_comtrade_sample.csv
+  publication_ts_utc: 2026-03-20T00:00:00Z
+unctad:
+  snapshot_file: src/tests/fixtures/real_source/unctad_shipping_sample.csv
+  publication_ts_utc: 2026-03-20T00:00:00Z
+gdelt:
+  lastupdate_url: http://data.gdeltproject.org/gdeltv2/lastupdate.txt
+  masterfile_url: http://data.gdeltproject.org/gdeltv2/masterfilelist.txt
+  export_file_limit: 24
+  gkg_file_limit: 4
+unhcr:
+  population_base_url: https://api.unhcr.org/population/v1/population/
+  population_origin_year: 2024
+  page_size: 500
+wdi:
+  api_base_url: https://api.worldbank.org/v2
+  country_selector: all
+  per_page: 20000
+  mrv: 10
+  indicators:
+    macro_gdp_growth_annual_pct: NY.GDP.MKTP.KD.ZG
+    macro_cpi_yoy: FP.CPI.TOTL.ZG
+    macro_population_total: SP.POP.TOTL
+ucdp:
+  download_url: https://ucdp.uu.se/downloads/ged/ged251-csv.zip
+  min_year: 2015
+ucdp_onset:
+  interstate_download_url: https://ucdp.uu.se/downloads/onset/ucdp-interstate-country-onset-251.csv
+  intrastate_download_url: https://ucdp.uu.se/downloads/onset/ucdp-intrastate-country-onset-251.csv

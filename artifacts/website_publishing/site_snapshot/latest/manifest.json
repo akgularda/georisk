@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "site_snapshot-2026-03-29",
+  "published_at": "2026-03-29T00:34:18.086724Z",
+  "fresh_until": "2026-04-08T00:34:18.086724Z",
+  "stale_after": "2026-04-19T00:34:18.086724Z",
+  "baseline_used": false,
+  "forecast_as_of": "2026-03-23",
+  "generated_at": "2026-03-29T00:34:18.086724Z",
+  "coverage_count": 30,
+  "top_country_iso3": "AUS",
+  "top_country_name": "Australia",
+  "predicted_conflict": {
+    "label": "Australia",
+    "countries": [
+      {
+        "iso3": "AUS",
+        "country_name": "Australia"
+      }
+    ],
+    "summary": "Australia has no observed forward label outcome yet for the latest country-week snapshot.",
+    "report_slug": "aus-latest",
+    "reason_source": "report_inputs",
+    "target_name": "country_week_onset_30d",
+    "horizon_days": 30
+  },
+  "primary_target": "onset",
+  "alert_type": "No Clear Leader",
+  "model_status": "monitoring_only",
+  "no_clear_leader": true,
+  "provenance": {
+    "onset": {
+      "training": {
+        "run_name": "country_week_onset_logit_30d",
+        "artifact_path": "C:\\Users\\akgul\\Downloads\\codex_prompts_georisk\\georisk\\artifacts\\forecasting\\train\\country_week_onset_logit_30d",
+        "completed_at": "2026-03-29T00:42:25.579899Z",
+        "model_name": "logit"
+      },
+      "calibration": {
+        "run_name": "country_week_onset_logit",
+        "artifact_path": "C:\\Users\\akgul\\Downloads\\codex_prompts_georisk\\georisk\\artifacts\\forecasting\\calibration\\country_week_onset_logit",
+        "completed_at": "2026-03-29T00:42:29.268499Z",
+        "model_name": "logit"
+      },
+      "backtest": {
+        "run_name": "country_week_onset_logit",
+        "artifact_path": "C:\\Users\\akgul\\Downloads\\codex_prompts_georisk\\georisk\\artifacts\\backtesting\\run\\country_week_onset_logit",
+        "completed_at": "2026-03-29T00:43:19.346184Z",
+        "model_name": "logit"
+      }
+    },
+    "escalation": {
+      "training": {
+        "run_name": "country_week_logit_30d",
+        "artifact_path": "artifacts\\forecasting\\train\\country_week_logit_30d",
+        "completed_at": "2026-03-29T00:42:42.984907Z",
+        "model_name": "logit"
+      },
+      "calibration": {
+        "run_name": "country_week_logit",
+        "artifact_path": "artifacts\\forecasting\\calibration\\country_week_logit",
+        "completed_at": "2026-03-29T00:42:46.566501Z",
+        "model_name": "logit"
+      },
+      "backtest": {
+        "run_name": "country_week_logit",
+        "artifact_path": "artifacts\\backtesting\\run\\country_week_logit",
+        "completed_at": "2026-03-29T00:43:45.933113Z",
+        "model_name": "logit"
+      }
+    },
+    "structural": {
+      "training": {
+        "run_name": "country_week_onset_structural_90d",
+        "artifact_path": "artifacts\\forecasting\\train\\country_week_onset_structural_90d",
+        "completed_at": "2026-03-29T00:41:38.494670Z",
+        "model_name": "logit"
+      },
+      "calibration": {
+        "run_name": "country_week_onset_structural_90d",
+        "artifact_path": "artifacts\\forecasting\\calibration\\country_week_onset_structural_90d",
+        "completed_at": "2026-03-29T00:41:42.094538Z",
+        "model_name": "logit"
+      },
+      "backtest": {
+        "run_name": "country_week_onset_structural_90d",
+        "artifact_path": "artifacts\\backtesting\\run\\country_week_onset_structural_90d",
+        "completed_at": "2026-03-29T00:42:16.600417Z",
+        "model_name": "logit"
+      }
+    }
+  }
+}

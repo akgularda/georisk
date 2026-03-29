@@ -1,0 +1,338 @@
+version: 1
+notes: >-
+  Phase A source registry for the conflict-forecasting stack. Status values
+  reflect current implementation readiness, access constraints, and snapshot
+  requirements.
+phase_a_sources:
+  - key: acled
+    name: ACLED
+    readiness: implemented
+    access_requirement: account_required
+    snapshot_requirement: none
+    category: event
+    access_pattern: export_tool_or_api
+    notes: Registration is required; point-in-time backtests need preserved exports.
+    source_urls:
+      - https://acleddata.com/conflict-data
+      - https://acleddata.com/conflict-data/data-export-tool
+  - key: ucdp_ged
+    name: UCDP GED
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: snapshot_required
+    category: event
+    access_pattern: versioned_snapshot
+    notes: Implemented in the current pipeline; keep annual releases versioned for backtests.
+    source_urls:
+      - https://ucdp.uu.se/downloads/
+      - https://ucdp.uu.se/ged/data.php
+  - key: ucdp_onset
+    name: UCDP Country Onset
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: snapshot_required
+    category: label_truth
+    access_pattern: versioned_snapshot
+    notes: Official country-year interstate and intrastate onset truth.
+    source_urls:
+      - https://ucdp.uu.se/downloads/
+      - https://ucdp.uu.se/downloads/onset/
+  - key: gdelt
+    name: GDELT 2.0
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: none
+    category: event_and_text
+    access_pattern: raw_download
+    notes: Implemented via raw EVENTS and GKG file downloads.
+    source_urls:
+      - https://www.gdeltproject.org/
+      - https://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/
+  - key: unhcr
+    name: UNHCR displacement data
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: none
+    category: humanitarian
+    access_pattern: api
+    notes: Implemented via the population API path.
+    source_urls:
+      - https://www.unhcr.org/data.html
+      - https://api.unhcr.org/docs/refugee-statistics.html
+  - key: wdi
+    name: World Bank WDI
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: none
+    category: macro
+    access_pattern: api
+    notes: Implemented for GDP growth, CPI inflation, and total population.
+    source_urls:
+      - https://api.worldbank.org/v2
+      - https://databank.worldbank.org/source/world-development-indicators
+  - key: imf
+    name: IMF
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: snapshot_required
+    category: macro
+    access_pattern: snapshot
+    notes: Snapshot-backed commodity and macro stress series.
+    source_urls:
+      - https://www.imf.org/en/Data
+  - key: fao
+    name: FAO
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: snapshot_required
+    category: food
+    access_pattern: snapshot
+    notes: Snapshot-backed food-price pressure series.
+    source_urls:
+      - https://www.fao.org/faostat/en/#data
+  - key: vdem
+    name: V-Dem
+    readiness: missing
+    access_requirement: open
+    snapshot_requirement: none
+    category: governance
+    access_pattern: annual_snapshot
+    notes: Primary governance option; no connector yet.
+    source_urls:
+      - https://www.v-dem.net/data/the-v-dem-dataset/
+  - key: wgi
+    name: Worldwide Governance Indicators
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: none
+    category: governance
+    access_pattern: annual_snapshot
+    notes: Implemented as a snapshot-backed governance baseline.
+    source_urls:
+      - https://www.worldbank.org/en/publication/worldwide-governance-indicators
+  - key: idea
+    name: IDEA election calendar
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: none
+    category: election
+    access_pattern: calendar_snapshot
+    notes: Implemented as a snapshot-backed election calendar for trigger timing.
+    source_urls:
+      - https://www.idea.int/data-tools/data/electoral-calendar
+  - key: sipri
+    name: SIPRI
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: snapshot_required
+    category: security
+    access_pattern: annual_snapshot
+    notes: Implemented as a snapshot-backed annual security baseline.
+    source_urls:
+      - https://www.sipri.org/databases
+  - key: unctad
+    name: UNCTAD
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: snapshot_required
+    category: trade_and_shipping
+    access_pattern: snapshot
+    notes: Snapshot-backed shipping connectivity series.
+    source_urls:
+      - https://unctadstat.unctad.org/
+  - key: noaa
+    name: NOAA
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: snapshot_required
+    category: climate
+    access_pattern: documented_or_snapshot
+    notes: Implemented as a snapshot-backed climate stress baseline.
+    source_urls:
+      - https://www.noaa.gov/
+  - key: nasa_black_marble
+    name: NASA Black Marble
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: snapshot_required
+    category: climate_and_activity
+    access_pattern: snapshot
+    notes: Implemented as a snapshot-backed night-lights activity baseline.
+    source_urls:
+      - https://blackmarble.gsfc.nasa.gov/
+  - key: un_comtrade
+    name: UN Comtrade
+    readiness: implemented
+    access_requirement: open
+    snapshot_requirement: snapshot_required
+    category: trade
+    access_pattern: snapshot
+    notes: Snapshot-backed trade flow series.
+    source_urls:
+      - https://comtradeplus.un.org/
+serving_contracts:
+  - contract_name: gold_country_week_features
+    artifact_name: country_week_features
+    status: implemented
+    grain: country_week
+    key_columns:
+      - country_iso3
+      - week_start_date
+    required_columns:
+      - country_iso3
+      - week_start_date
+      - label_escalation_7d
+      - label_escalation_30d
+      - label_onset_30d
+      - label_onset_90d
+      - label_interstate_30d
+      - label_interstate_onset_30d
+      - label_interstate_onset_90d
+      - gdelt_event_count_7d
+      - gdelt_avg_goldstein_7d
+      - gdelt_avg_event_tone_7d
+      - gdelt_num_mentions_7d
+      - gdelt_num_articles_7d
+      - gdelt_document_count_7d
+      - gdelt_avg_document_tone_7d
+      - ucdp_history_event_count_52w
+      - ucdp_history_best_deaths_52w
+      - ucdp_history_state_based_events_52w
+      - macro_gdp_growth_annual_pct
+      - macro_cpi_yoy
+      - macro_population_total
+      - humanitarian_refugees
+      - humanitarian_asylum_seekers
+      - humanitarian_idps
+      - climate_drought_severity_index
+      - climate_temperature_anomaly_c
+      - climate_precipitation_anomaly_pct
+      - climate_night_lights_anomaly_pct
+      - climate_night_lights_zscore
+      - security_military_expenditure_usd
+      - security_military_expenditure_pct_gdp
+      - security_arms_import_volume_index
+      - trade_exports_value_usd
+      - trade_imports_value_usd
+      - trade_exports_3m_change_pct
+      - trade_imports_3m_change_pct
+      - shipping_lsci_index
+      - shipping_port_connectivity_index
+      - snapshot_ts_utc
+    optional_columns:
+      - feature_snapshot_hash
+    notes: Current implemented gold table in data/gold/country_week_features/.
+  - contract_name: gold_entity_day_features
+    artifact_name: entity_day_features
+    status: implemented
+    grain: entity_day
+    key_columns:
+      - entity_id
+      - feature_date
+    required_columns:
+      - entity_id
+      - entity_type
+      - country_iso3
+      - country_name
+      - feature_date
+      - source_week_start_date
+    optional_columns:
+      - entity_name
+      - region_name
+      - snapshot_ts_utc
+      - feature_snapshot_hash
+      - acled_event_count_7d
+      - acled_event_count_28d
+      - gdelt_event_count_7d
+      - food_price_index
+      - macro_cpi_yoy
+      - climate_drought_severity_index
+    notes: Thin country-as-entity daily expansion derived from gold_country_week_features.
+  - contract_name: gold_entity_day_labels
+    artifact_name: entity_day_labels
+    status: implemented
+    grain: entity_day
+    key_columns:
+      - entity_id
+      - label_date
+      - horizon_days
+    required_columns:
+      - entity_id
+      - country_iso3
+      - label_date
+      - horizon_days
+      - label_escalation_7d
+      - label_escalation_30d
+      - label_onset_30d
+      - label_onset_90d
+      - label_interstate_onset_30d
+      - label_interstate_onset_90d
+    optional_columns:
+      - entity_name
+      - entity_type
+      - country_name
+      - source_week_start_date
+      - snapshot_ts_utc
+    notes: Wide daily label expansion with one row per country-day-horizon, derived from implemented weekly labels on gold_country_week_features.
+  - contract_name: gold_report_inputs
+    artifact_name: report_inputs
+    status: implemented
+    grain: report_as_of
+    key_columns:
+      - country_iso3
+      - report_date
+    required_columns:
+      - country_iso3
+      - country_name
+      - region_name
+      - report_date
+      - risk_level
+      - freshness_days
+      - summary
+      - chronology
+    optional_columns:
+      - report_id
+      - report_slug
+      - report_title
+      - as_of_date
+      - forecast_horizon_days
+      - forecast_target
+      - forecast_probability
+      - top_drivers
+      - top_drivers_json
+      - source_snapshot_hash
+      - snapshot_ts_utc
+      - report_subtitle
+    notes: Deterministic latest-country report rows derived from the most recent weekly row per country.
+  - contract_name: gold_social_inputs
+    artifact_name: social_inputs
+    status: implemented
+    grain: social_as_of
+    key_columns:
+      - country_iso3
+      - publish_date
+    required_columns:
+      - country_iso3
+      - country_name
+      - publish_date
+      - score_delta
+      - summary_line
+      - top_drivers
+      - report_slug
+    optional_columns:
+      - post_id
+      - platform_name
+      - as_of_date
+      - forecast_target
+      - forecast_horizon_days
+      - forecast_probability
+      - headline
+      - body
+      - call_to_action
+      - destination_url
+      - source_snapshot_hash
+      - snapshot_ts_utc
+      - entity_id
+      - entity_name
+      - channel_tag
+    notes: Deterministic social-ready latest-country rows derived from the most recent weekly row per country.

@@ -1,0 +1,48 @@
+export const frontmatter = {
+  title: "Data sources and point-in-time discipline",
+  slug: "data",
+  date: "2026-03-28",
+  updatedAt: "2026-03-28T21:15:00Z",
+  summary: "How GeoRisk combines event, narrative, structural, and humanitarian inputs without breaking time integrity.",
+  tags: ["data", "sources", "point-in-time", "features"],
+  draft: false
+};
+
+<h2 id="source-families">Source families</h2>
+
+GeoRisk uses a multi-source stack because no single geopolitical feed is sufficient for onset warning.
+
+- GDELT for narrative attention, document volume, and tone-linked event context
+- ACLED-derived weekly activity features for event counts, fatalities, protests, riots, and remote violence
+- UCDP history features for longer conflict memory
+- UNHCR-style humanitarian indicators for displacement pressure
+- World Bank style macro and governance indicators for slower structural context
+- shipping, trade, climate, election, and security indicators for cross-domain amplification signals
+
+<h2 id="point-in-time">Point-in-time integrity</h2>
+
+The data stack is built to preserve time order. Training and publishing should only use values available at or before the country-week being scored. That protects the forecast from hindsight leakage and keeps backtests closer to real operating conditions.
+
+The weekly panel is therefore dense, time-indexed, and forward-label aware. Missing weeks are explicitly represented instead of being silently skipped.
+
+<h2 id="onset-features">Onset-oriented features</h2>
+
+The onset-first model does not rely only on static country characteristics. It uses recent-change and trigger-oriented features such as:
+
+- 7-day versus 28-day acceleration
+- first-difference and delta features
+- quiet-window flags
+- spillover from neighboring countries
+- recent novelty in organized violence activity
+
+Those features are designed to help the model surface movement before conflict is obvious, not merely confirm that an already-active theater remains dangerous.
+
+<h2 id="structural-context">Structural context</h2>
+
+Slow-moving variables such as governance, macro stress, humanitarian burden, and long conflict history remain important, but they are better interpreted as background risk than as the sole reason to publish a near-term alert.
+
+That is now reflected in the live stack. GeoRisk runs a slower structural-prior layer that estimates medium-horizon onset susceptibility and feeds that prior into the faster weekly onset trigger model.
+
+<h2 id="coverage-limits">Coverage limits</h2>
+
+Coverage is constrained by source lag, revisions, and uneven reporting quality across countries. A low score can reflect true calm, weak signal, or data scarcity. That is one reason the site now supports `Monitoring Only` and `No Clear Leader` instead of pretending every week produces a clean winner.

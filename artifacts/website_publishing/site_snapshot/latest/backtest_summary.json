@@ -1,0 +1,30 @@
+{
+  "primary_model": "logit",
+  "baseline_model": "prior_rate",
+  "top_model_name": "prior_rate",
+  "primary_target": "onset",
+  "alert_type": "No Clear Leader",
+  "model_status": "monitoring_only",
+  "no_clear_leader": true,
+  "publish_threshold": 0.008849557522123894,
+  "alert_threshold": 0.008849557522123894,
+  "episode_recall": 1.0,
+  "false_alerts_per_true_alert": 4.0,
+  "recall_at_5": 1.0,
+  "recall_at_10": 1.0,
+  "no_clear_leader_rate": 0.9484848484848485,
+  "false_alert_burden": 8,
+  "new_alert_count": 10,
+  "true_alert_count": 2,
+  "false_alert_count": 8,
+  "calibration_method": "isotonic",
+  "baseline_deltas": [
+    {
+      "model_name": "logit",
+      "delta_pr_auc": -0.00016835016835016828,
+      "delta_roc_auc": 0.3956537912750725,
+      "delta_f1": 0.0,
+      "delta_brier_score": -0.0003279632611094298
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ForecastPredictionRecord",
+  "type": "object",
+  "required": [
+    "entity_id",
+    "entity_name",
+    "as_of_date",
+    "target_name",
+    "horizon_days",
+    "raw_score",
+    "calibrated_probability",
+    "model_version",
+    "training_window_id",
+    "top_positive_drivers",
+    "top_negative_drivers",
+    "feature_snapshot_hash"
+  ],
+  "properties": {
+    "entity_id": {"type": "string"},
+    "entity_name": {"type": "string"},
+    "as_of_date": {"type": "string", "format": "date"},
+    "target_name": {"type": "string"},
+    "horizon_days": {"type": "integer"},
+    "raw_score": {"type": "number"},
+    "calibrated_probability": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+    "model_version": {"type": "string"},
+    "training_window_id": {"type": "string"},
+    "top_positive_drivers": {"type": "string"},
+    "top_negative_drivers": {"type": "string"},
+    "feature_snapshot_hash": {"type": "string"}
+  }
+}
