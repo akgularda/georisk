@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
@@ -12,6 +13,7 @@ from typing import TextIO
 from urllib.request import Request, urlopen
 
 DEFAULT_REVALIDATE_URL = "http://localhost:3000/api/revalidate"
+DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG = "configs/data_platform/pipeline_country_week_features.yaml"
 
 
 @dataclass(frozen=True)
@@ -22,7 +24,11 @@ class RefreshStep:
     retry_delay_seconds: float = 5.0
 
 
-def build_refresh_steps(repo_root: Path) -> list[RefreshStep]:
+def build_refresh_steps(
+    repo_root: Path,
+    *,
+    country_week_features_config: str = DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG,
+) -> list[RefreshStep]:
     forecasting_root = repo_root / "artifacts" / "forecasting"
     baseline_training_run_dir = forecasting_root / "train" / "country_week_30d"
     baseline_calibration_run_dir = forecasting_root / "calibration" / "country_week_default"
@@ -40,7 +46,7 @@ def build_refresh_steps(repo_root: Path) -> list[RefreshStep]:
     return [
         RefreshStep(
             "Build dense country-week features",
-            ("-m", "src.data_platform.orchestration.cli", "run", "--config", "configs/data_platform/pipeline_country_week_features.yaml"),
+            ("-m", "src.data_platform.orchestration.cli", "run", "--config", country_week_features_config),
             max_attempts=3,
         ),
         RefreshStep(
@@ -260,25 +266,38 @@ def _write_output(log_handle: TextIO, output: str) -> None:
 
 def _run_step(*, python_executable: str, step: RefreshStep, repo_root: Path, log_handle: TextIO) -> None:
     command = [python_executable, *step.arguments]
+    env = os.environ.copy()
+    env.setdefault("PYTHONUNBUFFERED", "1")
     for attempt in range(1, step.max_attempts + 1):
+        started_at = time.monotonic()
         _log_line(log_handle, step.label if step.max_attempts == 1 else f"{step.label} (attempt {attempt}/{step.max_attempts})")
         log_handle.write(f"{json.dumps(command)}\n")
         log_handle.flush()
 
-        completed = subprocess.run(
+        process = subprocess.Popen(
             command,
             cwd=repo_root,
-            capture_output=True,
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             text=True,
-            check=False,
+            bufsize=1,
         )
-        _write_output(log_handle, completed.stdout)
-        _write_output(log_handle, completed.stderr)
-        if completed.returncode == 0:
+        if process.stdout is not None:
+            for line in process.stdout:
+                _write_output(log_handle, line)
+            process.stdout.close()
+        return_code = process.wait()
+        elapsed_seconds = time.monotonic() - started_at
+        if return_code == 0:
+            _log_line(log_handle, f"Completed {step.label} in {elapsed_seconds:.1f}s")
             return
         if attempt == step.max_attempts:
             raise RuntimeError(f"Step failed: {step.label}")
-        _log_line(log_handle, f"Attempt {attempt} of {step.max_attempts} failed for {step.label}; retrying in {step.retry_delay_seconds:g}s")
+        _log_line(
+            log_handle,
+            f"Attempt {attempt} of {step.max_attempts} failed for {step.label} after {elapsed_seconds:.1f}s; retrying in {step.retry_delay_seconds:g}s",
+        )
         time.sleep(step.retry_delay_seconds)
 
 
@@ -296,6 +315,7 @@ def run_backend_refresh(
     python_executable: str | None = None,
     log_root: Path | None = None,
     revalidate_url: str | None = DEFAULT_REVALIDATE_URL,
+    country_week_features_config: str = DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG,
 ) -> Path:
     resolved_repo_root = repo_root.resolve()
     resolved_python = python_executable or sys.executable
@@ -305,7 +325,10 @@ def run_backend_refresh(
 
     with log_file.open("w", encoding="utf-8") as log_handle:
         _log_line(log_handle, "Backend refresh started")
-        for step in build_refresh_steps(resolved_repo_root):
+        for step in build_refresh_steps(
+            resolved_repo_root,
+            country_week_features_config=country_week_features_config,
+        ):
             _run_step(
                 python_executable=resolved_python,
                 step=step,
@@ -336,6 +359,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--log-root", type=Path)
     parser.add_argument("--revalidate-url", default=DEFAULT_REVALIDATE_URL)
     parser.add_argument("--skip-revalidate", action="store_true")
+    parser.add_argument("--country-week-features-config", default=DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG)
     args = parser.parse_args(argv)
 
     run_backend_refresh(
@@ -343,6 +367,7 @@ def main(argv: list[str] | None = None) -> int:
         python_executable=args.python_executable,
         log_root=args.log_root,
         revalidate_url=None if args.skip_revalidate else args.revalidate_url,
+        country_week_features_config=args.country_week_features_config,
     )
     return 0
 

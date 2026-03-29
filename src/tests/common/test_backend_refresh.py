@@ -1,13 +1,19 @@
 from __future__ import annotations
 
-import subprocess
-from pathlib import Path
 from io import StringIO
+from pathlib import Path
 from urllib.error import URLError
 
 import pytest
 
-from src.common.backend_refresh import DEFAULT_REVALIDATE_URL, RefreshStep, _run_step, build_refresh_steps, run_backend_refresh
+from src.common.backend_refresh import (
+    DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG,
+    DEFAULT_REVALIDATE_URL,
+    RefreshStep,
+    _run_step,
+    build_refresh_steps,
+    run_backend_refresh,
+)
 
 
 def test_build_refresh_steps_covers_daily_pipeline(tmp_path: Path) -> None:
@@ -46,7 +52,7 @@ def test_build_refresh_steps_covers_daily_pipeline(tmp_path: Path) -> None:
         "src.data_platform.orchestration.cli",
         "run",
         "--config",
-        "configs/data_platform/pipeline_country_week_features.yaml",
+        DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG,
     )
     assert steps[0].max_attempts == 3
     assert "--training-run-dir" in steps[2].arguments
@@ -100,6 +106,32 @@ def test_run_backend_refresh_executes_steps_writes_log_and_revalidates(tmp_path:
     assert revalidate_calls == [DEFAULT_REVALIDATE_URL]
 
 
+def test_run_backend_refresh_supports_country_week_config_override(tmp_path: Path, monkeypatch) -> None:
+    calls: list[tuple[str, ...]] = []
+
+    def fake_run_step(*, python_executable: str, step, repo_root: Path, log_handle) -> None:
+        calls.append((python_executable, *step.arguments))
+        log_handle.write(f"completed {step.label}\n")
+
+    monkeypatch.setattr("src.common.backend_refresh._run_step", fake_run_step)
+
+    run_backend_refresh(
+        repo_root=tmp_path,
+        python_executable="python-test",
+        revalidate_url=None,
+        country_week_features_config="configs/data_platform/pipeline_country_week_features_daily.yaml",
+    )
+
+    assert calls[0] == (
+        "python-test",
+        "-m",
+        "src.data_platform.orchestration.cli",
+        "run",
+        "--config",
+        "configs/data_platform/pipeline_country_week_features_daily.yaml",
+    )
+
+
 def test_run_backend_refresh_logs_and_skips_failed_revalidate(tmp_path: Path, monkeypatch) -> None:
     def fake_run_step(*, python_executable: str, step, repo_root: Path, log_handle) -> None:
         log_handle.write(f"completed {step.label}\n")
@@ -144,14 +176,17 @@ def test_run_backend_refresh_can_skip_revalidate_entirely(tmp_path: Path, monkey
 def test_run_step_retries_retryable_steps_until_success(tmp_path: Path, monkeypatch) -> None:
     attempts = 0
 
-    def fake_run(command, cwd, capture_output, text, check):
-        nonlocal attempts
-        attempts += 1
-        if attempts == 1:
-            return subprocess.CompletedProcess(command, 1, "", "HTTP Error 502: Bad Gateway")
-        return subprocess.CompletedProcess(command, 0, "ok", "")
+    class FakePopen:
+        def __init__(self, command, cwd, env, stdout, stderr, text, bufsize):
+            nonlocal attempts
+            attempts += 1
+            self.stdout = StringIO("" if attempts == 1 else "ok\n")
+            self._return_code = 1 if attempts == 1 else 0
 
-    monkeypatch.setattr("src.common.backend_refresh.subprocess.run", fake_run)
+        def wait(self) -> int:
+            return self._return_code
+
+    monkeypatch.setattr("src.common.backend_refresh.subprocess.Popen", FakePopen)
     monkeypatch.setattr("src.common.backend_refresh.time.sleep", lambda _: None)
 
     log_handle = StringIO()
@@ -172,10 +207,15 @@ def test_run_step_retries_retryable_steps_until_success(tmp_path: Path, monkeypa
 
 
 def test_run_step_raises_after_last_failed_attempt(tmp_path: Path, monkeypatch) -> None:
-    def fake_run(command, cwd, capture_output, text, check):
-        return subprocess.CompletedProcess(command, 1, "", "still broken")
+    class FakePopen:
+        def __init__(self, command, cwd, env, stdout, stderr, text, bufsize):
+            self.stdout = StringIO("still broken\n")
+            self._return_code = 1
 
-    monkeypatch.setattr("src.common.backend_refresh.subprocess.run", fake_run)
+        def wait(self) -> int:
+            return self._return_code
+
+    monkeypatch.setattr("src.common.backend_refresh.subprocess.Popen", FakePopen)
     monkeypatch.setattr("src.common.backend_refresh.time.sleep", lambda _: None)
 
     with pytest.raises(RuntimeError, match="Step failed: Publish website snapshot"):
