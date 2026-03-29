@@ -4,6 +4,8 @@ import test from "node:test";
 import {
   buildMonitoringWatchItems,
   getCountryDisplaySummary,
+  getMonitoringHeroConflictLabel,
+  getMonitoringHeroSummary,
   getPredictedConflictLabel,
   getPrimaryCountryLabel,
   getReportConflictLabel,
@@ -192,6 +194,46 @@ test("builds a multi-country predicted conflict label from report countries", ()
   });
 
   assert.equal(getReportConflictLabel(report), "Iran / Israel");
+});
+
+test("prefers the report-backed conflict label over the raw snapshot label in monitoring mode", () => {
+  const iran = buildCountry({
+    iso3: "IRN",
+    slug: "iran",
+    name: "Iran",
+  });
+  const report = buildReport({
+    title: "Iran-Israel theater watch",
+    slug: "iran-israel-escalation-watch",
+    date: "2026-03-27",
+    summary: "Iran and Israel now sit at the center of the theater desk.",
+    region: "Middle East",
+    countries: ["iran", "israel"],
+  });
+
+  assert.equal(getMonitoringHeroConflictLabel(report, iran, "Australia"), "Iran / Israel");
+});
+
+test("prefers the report-backed summary over the raw snapshot summary in monitoring mode", () => {
+  const iran = buildCountry({
+    iso3: "IRN",
+    slug: "iran",
+    name: "Iran",
+    executiveSummary: "Generic snapshot summary",
+  });
+  const report = buildReport({
+    title: "Iran-Israel theater watch",
+    slug: "iran-israel-escalation-watch",
+    date: "2026-03-27",
+    summary: "Iran and Israel now sit at the center of the theater desk.",
+    region: "Middle East",
+    countries: ["iran", "israel"],
+  });
+
+  assert.equal(
+    getMonitoringHeroSummary(report, iran, "Australia has no observed forward label outcome yet."),
+    "Iran and Israel now sit at the center of the theater desk.",
+  );
 });
 
 test("falls back to the focus country when no report-backed conflict label exists", () => {

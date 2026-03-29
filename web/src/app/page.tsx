@@ -5,7 +5,12 @@ import { countryShapes } from "@/lib/country-shapes";
 import { getAllReports } from "@/lib/content";
 import { formatDateTime, formatProbabilityDelta, formatProbabilityPercent } from "@/lib/formatters";
 import { buildHomepageState } from "@/lib/homepage-state";
-import { getPredictedConflictLabel, getReportConflictLabel } from "@/lib/monitoring-presentation";
+import {
+  getMonitoringHeroConflictLabel,
+  getMonitoringHeroSummary,
+  getPredictedConflictLabel,
+  getReportConflictLabel,
+} from "@/lib/monitoring-presentation";
 import { getOperationalCountries, getOperationalStatusSummary } from "@/lib/site-data";
 
 function displayConfidence(modelStatus: string, noClearLeader: boolean) {
@@ -66,9 +71,12 @@ export default async function HomePage() {
   const topCountries = homepage.watchItems;
   const heroConflictLabel =
     homepage.mode === "monitoring"
-      ? status.predictedConflict?.label ?? getPredictedConflictLabel(leadReport, leadCountry)
+      ? getMonitoringHeroConflictLabel(leadReport, leadCountry, status.predictedConflict?.label)
       : leadCountry?.name ?? "";
-  const heroSummary = homepage.mode === "monitoring" ? status.predictedConflict?.summary ?? homepage.heroSummary : homepage.heroSummary;
+  const heroSummary =
+    homepage.mode === "monitoring"
+      ? getMonitoringHeroSummary(leadReport, leadCountry, status.predictedConflict?.summary)
+      : homepage.heroSummary;
 
   if (!leadCountry) {
     return (

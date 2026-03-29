@@ -64,6 +64,34 @@ export function getPredictedConflictLabel(
   return fallbackCountry?.name ?? "Unavailable";
 }
 
+export function getMonitoringHeroConflictLabel(
+  report: ReportFrontmatter | null,
+  fallbackCountry: OperationalCountry | null | undefined,
+  statusLabel?: string | null,
+): string {
+  if (report) {
+    return getReportConflictLabel(report);
+  }
+  if (statusLabel) {
+    return statusLabel;
+  }
+  return fallbackCountry?.name ?? "Unavailable";
+}
+
+export function getMonitoringHeroSummary(
+  report: ReportFrontmatter | null,
+  fallbackCountry: OperationalCountry | null | undefined,
+  statusSummary?: string | null,
+): string {
+  if (report?.summary) {
+    return report.summary;
+  }
+  if (statusSummary) {
+    return statusSummary;
+  }
+  return fallbackCountry?.executiveSummary ?? "";
+}
+
 export function hasPublishableLeader(status: OperationalStatusSummary): boolean {
   return status.modelStatus === "promoted" && !status.noClearLeader && status.leadTieCount <= 1;
 }
