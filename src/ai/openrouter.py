@@ -51,7 +51,9 @@ def _cache_path(payload: dict[str, Any]) -> Path:
     return CACHE_DIR / f"{digest}.json"
 
 
-def _strip_code_fences(text: str) -> str:
+def _strip_code_fences(text: Any) -> str:
+    if not isinstance(text, str):
+        return ""
     stripped = text.strip()
     if stripped.startswith("```"):
         stripped = stripped.split("\n", 1)[1] if "\n" in stripped else stripped

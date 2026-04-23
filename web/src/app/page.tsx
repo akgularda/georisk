@@ -8,7 +8,6 @@ import { buildHomepageState } from "@/lib/homepage-state";
 import {
   getMonitoringHeroConflictLabel,
   getMonitoringHeroSummary,
-  getPredictedConflictLabel,
   getReportConflictLabel,
 } from "@/lib/monitoring-presentation";
 import { getOperationalCountries, getOperationalStatusSummary } from "@/lib/site-data";
