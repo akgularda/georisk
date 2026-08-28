@@ -131,6 +131,20 @@ def _write_augmented_interstate_dataset(source_path: Path, output_path: Path) ->
     return output_path
 
 
+def _write_augmented_onset_dataset(source_path: Path, output_path: Path) -> Path:
+    frame = pd.read_parquet(source_path).copy()
+    frame["week_start_date"] = pd.to_datetime(frame["week_start_date"])
+    unique_weeks = sorted(frame["week_start_date"].drop_duplicates().tolist())
+    selected_positions = [40, 80, 140, 200, 260, 320, 380, 440, 500]
+    selected_weeks = {unique_weeks[index] for index in selected_positions if index < len(unique_weeks)}
+    positive_mask = frame["country_iso3"].eq("IRN") & frame["week_start_date"].isin(selected_weeks)
+    frame.loc[positive_mask, "label_onset_30d"] = 1
+    frame.loc[positive_mask, "label_onset_90d"] = 1
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    frame.to_parquet(output_path, index=False)
+    return output_path
+
+
 @pytest.fixture(scope="module")
 def country_week_dataset_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     project_root = Path(__file__).resolve().parents[3]
@@ -140,7 +154,10 @@ def country_week_dataset_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
         output_root=output_root,
         use_test_snapshots=True,
     )
-    return data_pipeline_result.gold_country_week_features_file
+    return _write_augmented_onset_dataset(
+        data_pipeline_result.gold_country_week_features_file,
+        output_root / "country_week_features_with_onsets.parquet",
+    )
 
 
 def test_training_calibration_prediction_and_explanation_pipeline(
