@@ -85,10 +85,23 @@ def _resolve_requested_models(
     return primary_model, None
 
 
-def run_backtest(config_path: Path, *, output_root: Path | None = None) -> BacktestRunResult:
+def run_backtest(
+    config_path: Path,
+    *,
+    output_root: Path | None = None,
+    recent_splits: int | None = None,
+) -> BacktestRunResult:
     config = load_yaml_config(config_path, BacktestConfig)
     _, training_frame, feature_columns = _training_frame_from_config(config)
-    windows = build_backtest_windows(training_frame, config.dataset_spec, config.split)
+    if recent_splits is not None:
+        if recent_splits < 1:
+            raise ValueError("recent_splits must be at least 1.")
+        split_config = config.split.model_copy(update={"max_splits": None})
+    else:
+        split_config = config.split
+    windows = build_backtest_windows(training_frame, config.dataset_spec, split_config)
+    if recent_splits is not None:
+        windows = windows[-recent_splits:]
     if not windows:
         raise ValueError("No backtest windows were generated.")
 

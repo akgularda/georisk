@@ -9,6 +9,7 @@ import pytest
 from src.common.backend_refresh import (
     DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG,
     DEFAULT_REVALIDATE_URL,
+    SITE_BACKTEST_RECENT_SPLITS,
     RefreshStep,
     _run_step,
     build_refresh_steps,
@@ -69,7 +70,8 @@ def test_build_refresh_steps_covers_daily_pipeline(tmp_path: Path) -> None:
 
 
 def test_site_refresh_profile_runs_only_published_model_families(tmp_path: Path) -> None:
-    labels = [step.label for step in build_refresh_steps(tmp_path, profile="site")]
+    steps = build_refresh_steps(tmp_path, profile="site")
+    labels = [step.label for step in steps]
 
     assert labels == [
         "Build dense country-week features",
@@ -88,6 +90,12 @@ def test_site_refresh_profile_runs_only_published_model_families(tmp_path: Path)
         "Publish website snapshot",
     ]
     assert all("interstate" not in label.lower() for label in labels)
+    backtest_steps = [step for step in steps if step.label.endswith(" backtest")]
+    assert len(backtest_steps) == 3
+    assert all(
+        step.arguments[-2:] == ("--recent-splits", str(SITE_BACKTEST_RECENT_SPLITS))
+        for step in backtest_steps
+    )
 
 
 def test_run_backend_refresh_executes_steps_writes_log_and_revalidates(tmp_path: Path, monkeypatch) -> None:

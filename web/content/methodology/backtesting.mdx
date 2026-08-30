@@ -2,7 +2,7 @@ export const frontmatter = {
   title: "Backtesting, thresholds, and abstention",
   slug: "backtesting",
   date: "2026-03-28",
-  updatedAt: "2026-03-28T21:15:00Z",
+  updatedAt: "2026-08-30T00:00:00Z",
   summary: "How GeoRisk selects operating thresholds, compares challengers to baseline, and decides when not to force a lead country.",
   tags: ["backtesting", "validation", "calibration", "abstention"],
   draft: false
@@ -24,6 +24,18 @@ That is intentional. The site does not force a dramatic headline when the rankin
 Forecasts are evaluated with strictly time-ordered walk-forward splits. GeoRisk does not randomize history and pretend the future was known in advance. Each validation slice is scored only after training on earlier periods.
 
 This matters because conflict data are path-dependent, sparse, and revised over time. A valid early-warning system has to prove that it can surface episodes out of sample, not only fit them in retrospect.
+
+<h3 id="operational-window">Operational versus research runs</h3>
+
+The reproducible research configs retain up to 12 walk-forward validation windows. The autonomous daily site refresh applies the same configs, features, models, calibration, and time ordering, but explicitly selects the three most recent available windows with `--recent-splits 3`. This runtime budget prevents an unfinished evaluation from blocking the daily publication job. The generated experiment manifest records the windows actually used; results from a three-window operational run must not be described as a 12-window research result.
+
+Run the full configured evaluation with:
+
+`python -m src.backtesting.cli run --config configs/backtesting/country_week_onset_logit.yaml`
+
+Reproduce the daily bounded evaluation with:
+
+`python -m src.backtesting.cli run --config configs/backtesting/country_week_onset_logit.yaml --recent-splits 3`
 
 <h2 id="thresholds">Threshold selection</h2>
 

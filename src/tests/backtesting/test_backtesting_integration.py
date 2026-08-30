@@ -133,7 +133,7 @@ def test_backtesting_run_and_replay(tmp_path: Path) -> None:
         encoding="utf-8",
     )
 
-    backtest_result = run_backtest(config_path, output_root=tmp_path / "artifacts")
+    backtest_result = run_backtest(config_path, output_root=tmp_path / "artifacts", recent_splits=3)
     replay_result = run_replay(replay_config_path, output_root=tmp_path / "artifacts")
 
     assert backtest_result.predictions_file.exists()
@@ -146,6 +146,7 @@ def test_backtesting_run_and_replay(tmp_path: Path) -> None:
     predictions = pd.read_parquet(backtest_result.predictions_file)
     alerts = pd.read_parquet(backtest_result.alerts_file)
     metrics_payload = json.loads(backtest_result.metrics_file.read_text(encoding="utf-8"))
+    windows_payload = json.loads(backtest_result.windows_file.read_text(encoding="utf-8"))
     report_text = backtest_result.report_file.read_text(encoding="utf-8")
     replay_text = replay_result.replay_file.read_text(encoding="utf-8")
 
@@ -155,6 +156,7 @@ def test_backtesting_run_and_replay(tmp_path: Path) -> None:
     assert {"is_alert", "alert_outcome", "alert_episode_id"}.issubset(alerts.columns)
     assert sorted(predictions["model_name"].unique().tolist()) == ["logit", "prior_rate"]
     assert metrics_payload["primary_model"] == "logit"
+    assert len(windows_payload["windows"]) == 3
     assert {"prior_rate", "logit"}.issubset(metrics_payload["models"])
     assert "### prior_rate" in report_text
     assert "### logit" in report_text

@@ -14,6 +14,7 @@ from urllib.request import Request, urlopen
 
 DEFAULT_REVALIDATE_URL = "http://localhost:3000/api/revalidate"
 DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG = "configs/data_platform/pipeline_country_week_features.yaml"
+SITE_BACKTEST_RECENT_SPLITS = 3
 
 
 @dataclass(frozen=True)
@@ -263,7 +264,18 @@ def build_refresh_steps(
         "Run logit backtest",
         "Publish website snapshot",
     }
-    return [step for step in steps if step.label in site_labels]
+    site_steps = [step for step in steps if step.label in site_labels]
+    return [
+        RefreshStep(
+            step.label,
+            (*step.arguments, "--recent-splits", str(SITE_BACKTEST_RECENT_SPLITS)),
+            max_attempts=step.max_attempts,
+            retry_delay_seconds=step.retry_delay_seconds,
+        )
+        if step.label.startswith("Run ") and step.label.endswith(" backtest")
+        else step
+        for step in site_steps
+    ]
 
 
 def _timestamp() -> str:

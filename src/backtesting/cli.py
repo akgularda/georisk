@@ -17,6 +17,12 @@ def main() -> None:
     run_parser = subparsers.add_parser("run", help="Run a backtest")
     run_parser.add_argument("--config", required=True, type=Path)
     run_parser.add_argument("--output-root", type=Path, default=None)
+    run_parser.add_argument(
+        "--recent-splits",
+        type=int,
+        default=None,
+        help="Evaluate only the newest N available walk-forward windows for bounded operational runs.",
+    )
 
     replay_parser = subparsers.add_parser("replay", help="Replay a single entity timeline")
     replay_parser.add_argument("--config", required=True, type=Path)
@@ -24,7 +30,11 @@ def main() -> None:
 
     arguments = parser.parse_args()
     if arguments.command == "run":
-        result = run_backtest(arguments.config, output_root=arguments.output_root)
+        result = run_backtest(
+            arguments.config,
+            output_root=arguments.output_root,
+            recent_splits=arguments.recent_splits,
+        )
         LOGGER.info("Backtest artifacts written to %s", result.run_dir)
         return
     result = run_replay(arguments.config, output_root=arguments.output_root)

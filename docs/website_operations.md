@@ -58,7 +58,7 @@ Run these locally when changing publication or web consumption behavior:
 
 ## Daily Automation
 
-The scheduled workflow runs once per day at `06:30` Europe/Istanbul (`03:30` UTC) and can also be started manually with `workflow_dispatch`. It uses the keyless `site` profile: only the onset, escalation, and structural evidence published by the website is rebuilt. The `full` profile remains available locally for research runs that include interstate experiments.
+The scheduled workflow runs once per day at `06:30` Europe/Istanbul (`03:30` UTC) and can also be started manually with `workflow_dispatch`. It uses the keyless `site` profile: only the onset, escalation, and structural evidence published by the website is rebuilt. Each site-profile backtest explicitly selects the three most recent available walk-forward windows (`--recent-splits 3`) so the publication job has a predictable runtime. The checked-in research configs retain their 12-window policy, and the `full` profile remains available locally for research runs that include interstate experiments.
 
 No account, API key, or model secret is required by the scheduled publication path. Public summaries are deterministic and source-derived.
 
