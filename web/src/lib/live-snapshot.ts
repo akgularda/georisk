@@ -462,8 +462,8 @@ function getSnapshotInputToken(pathOrFile: string): string {
   }
 
   const trackedFiles = ["manifest.json", "forecast_snapshot.json", "model_card.json", "backtest_summary.json", "status.json"]
-    .map((entry) => path.join(pathOrFile, entry))
-    .filter((entry) => fs.existsSync(entry))
+    .map((entry) => path.join(/* turbopackIgnore: true */ pathOrFile, entry))
+    .filter((entry) => fs.existsSync(/* turbopackIgnore: true */ entry))
     .map((entry) => `${path.basename(entry)}:${fs.statSync(entry).mtimeMs}`);
 
   const countriesDir = path.join(pathOrFile, "countries");

@@ -10,6 +10,7 @@ import {
   getOperationalForecastRows,
   getOperationalStatusSummary,
 } from "@/lib/site-data-core";
+import type { LiveSnapshotLoadResult } from "@/lib/types";
 
 test("maps the published snapshot into operational country records", () => {
   const countries = getOperationalCountries();
@@ -64,6 +65,15 @@ test("maps onset-first alert semantics and abstention from the published snapsho
       coverage_count: 2,
       lead_country_iso3: "LBN",
       lead_country_name: "Lebanon",
+      predicted_conflict: {
+        label: "Lebanon",
+        countries: [{ iso3: "LBN", country_name: "Lebanon" }] as { iso3: string; country_name: string }[],
+        summary: null,
+        report_slug: null,
+        reason_source: "lead_country",
+        target_name: "onset",
+        horizon_days: 30,
+      },
       prediction_file: "/tmp/site-snapshot/predictions.parquet",
       lead_tie_count: 2,
       primary_target: "onset",
@@ -89,6 +99,15 @@ test("maps onset-first alert semantics and abstention from the published snapsho
         coverage_count: 2,
         top_country_iso3: "LBN",
         top_country_name: "Lebanon",
+        predicted_conflict: {
+          label: "Lebanon",
+          countries: [{ iso3: "LBN", country_name: "Lebanon" }] as { iso3: string; country_name: string }[],
+          summary: null,
+          report_slug: null,
+          reason_source: "lead_country",
+          target_name: "onset",
+          horizon_days: 30,
+        },
         primary_target: "onset",
         alert_type: "No Clear Leader",
         model_status: "monitoring_only",
@@ -115,6 +134,15 @@ test("maps onset-first alert semantics and abstention from the published snapsho
         forecast_as_of: "2026-03-23",
         lead_country_iso3: "LBN",
         lead_country_name: "Lebanon",
+        predicted_conflict: {
+          label: "Lebanon",
+          countries: [{ iso3: "LBN", country_name: "Lebanon" }] as { iso3: string; country_name: string }[],
+          summary: null,
+          report_slug: null,
+          reason_source: "lead_country",
+          target_name: "onset",
+          horizon_days: 30,
+        },
         primary_target: "onset",
         alert_type: "No Clear Leader",
         no_clear_leader: true,
@@ -218,9 +246,38 @@ test("maps onset-first alert semantics and abstention from the published snapsho
       },
       source_kind: "preferred",
       source_path: "/tmp/site-snapshot",
-      status: null,
+      status: {
+        status: "ok",
+        freshness_tier: "fresh",
+        published_at: "2026-03-28T12:00:00Z",
+        forecast_as_of: "2026-03-23",
+        baseline_used: false,
+        coverage_count: 2,
+        lead_country_iso3: "LBN",
+        lead_country_name: "Lebanon",
+        predicted_conflict: {
+          label: "Lebanon",
+          countries: [{ iso3: "LBN", country_name: "Lebanon" }],
+          summary: null,
+          report_slug: null,
+          reason_source: "lead_country",
+          target_name: "onset",
+          horizon_days: 30,
+        },
+        prediction_file: "/tmp/site-snapshot/predictions.parquet",
+        lead_tie_count: 2,
+        primary_target: "onset",
+        alert_type: "No Clear Leader",
+        model_status: "monitoring_only",
+        no_clear_leader: true,
+        publish_threshold: 0.82,
+        alert_threshold: 0.76,
+        source_kind: "preferred",
+        source_path: "/tmp/site-snapshot",
+        message: "Lead ranking is currently weak.",
+      },
     },
-  } as const;
+  } satisfies LiveSnapshotLoadResult;
 
   const status = buildOperationalStatusSummaryFromSnapshot(snapshot);
   const countries = buildOperationalCountriesFromSnapshot(snapshot);
