@@ -75,6 +75,7 @@ def test_site_refresh_profile_runs_only_published_model_families(tmp_path: Path)
         "Build dense country-week features",
         "Train structural onset country-week model",
         "Calibrate structural onset country-week model",
+        "Predict structural onset country-week model",
         "Run structural onset backtest",
         "Train onset country-week model",
         "Calibrate onset country-week model",

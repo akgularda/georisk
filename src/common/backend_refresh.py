@@ -251,6 +251,7 @@ def build_refresh_steps(
         "Build dense country-week features",
         "Train structural onset country-week model",
         "Calibrate structural onset country-week model",
+        "Predict structural onset country-week model",
         "Run structural onset backtest",
         "Train onset country-week model",
         "Calibrate onset country-week model",
