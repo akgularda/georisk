@@ -1,9 +1,6 @@
 name: Daily Site Refresh
 
 on:
-  push:
-    branches:
-      - main
   schedule:
     - cron: "30 3 * * *" # 06:30 Europe/Istanbul
   workflow_dispatch:
@@ -23,7 +20,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,11 +37,7 @@ jobs:
       - name: Run daily backend refresh
         env:
           PYTHONUNBUFFERED: "1"
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL || 'openrouter/free' }}
-          OPENROUTER_BASE_URL: ${{ vars.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1/chat/completions' }}
-          OPENROUTER_TIMEOUT_SECONDS: "10"
-        run: python scripts/run_backend_refresh.py --skip-revalidate --country-week-features-config configs/data_platform/pipeline_country_week_features_daily.yaml
+        run: python scripts/run_backend_refresh.py --profile site --skip-revalidate --country-week-features-config configs/data_platform/pipeline_country_week_features_daily.yaml
       - uses: actions/setup-node@v4
         with:
           node-version: 24

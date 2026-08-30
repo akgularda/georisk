@@ -28,6 +28,7 @@ def build_refresh_steps(
     repo_root: Path,
     *,
     country_week_features_config: str = DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG,
+    profile: str = "full",
 ) -> list[RefreshStep]:
     forecasting_root = repo_root / "artifacts" / "forecasting"
     baseline_training_run_dir = forecasting_root / "train" / "country_week_30d"
@@ -43,7 +44,7 @@ def build_refresh_steps(
     logit_training_run_dir = forecasting_root / "train" / "country_week_logit_30d"
     logit_calibration_run_dir = forecasting_root / "calibration" / "country_week_logit"
 
-    return [
+    steps = [
         RefreshStep(
             "Build dense country-week features",
             ("-m", "src.data_platform.orchestration.cli", "run", "--config", country_week_features_config),
@@ -242,6 +243,26 @@ def build_refresh_steps(
             ("-m", "src.website_publishing.cli", "--config", "configs/website_publishing/site_snapshot.yaml"),
         ),
     ]
+    if profile == "full":
+        return steps
+    if profile != "site":
+        raise ValueError(f"Unknown refresh profile: {profile}")
+    site_labels = {
+        "Build dense country-week features",
+        "Train structural onset country-week model",
+        "Calibrate structural onset country-week model",
+        "Run structural onset backtest",
+        "Train onset country-week model",
+        "Calibrate onset country-week model",
+        "Predict onset country-week model",
+        "Train logit country-week model",
+        "Calibrate logit country-week model",
+        "Predict logit country-week model",
+        "Run onset backtest",
+        "Run logit backtest",
+        "Publish website snapshot",
+    }
+    return [step for step in steps if step.label in site_labels]
 
 
 def _timestamp() -> str:
@@ -316,6 +337,7 @@ def run_backend_refresh(
     log_root: Path | None = None,
     revalidate_url: str | None = DEFAULT_REVALIDATE_URL,
     country_week_features_config: str = DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG,
+    profile: str = "full",
 ) -> Path:
     resolved_repo_root = repo_root.resolve()
     resolved_python = python_executable or sys.executable
@@ -328,6 +350,7 @@ def run_backend_refresh(
         for step in build_refresh_steps(
             resolved_repo_root,
             country_week_features_config=country_week_features_config,
+            profile=profile,
         ):
             _run_step(
                 python_executable=resolved_python,
@@ -360,6 +383,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--revalidate-url", default=DEFAULT_REVALIDATE_URL)
     parser.add_argument("--skip-revalidate", action="store_true")
     parser.add_argument("--country-week-features-config", default=DEFAULT_COUNTRY_WEEK_FEATURES_CONFIG)
+    parser.add_argument("--profile", choices=("full", "site"), default="full")
     args = parser.parse_args(argv)
 
     run_backend_refresh(
@@ -368,6 +392,7 @@ def main(argv: list[str] | None = None) -> int:
         log_root=args.log_root,
         revalidate_url=None if args.skip_revalidate else args.revalidate_url,
         country_week_features_config=args.country_week_features_config,
+        profile=args.profile,
     )
     return 0
 

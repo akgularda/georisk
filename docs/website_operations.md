@@ -51,22 +51,16 @@ Run these locally when changing publication or web consumption behavior:
 
 - `python -m pytest src/tests/common/test_backend_refresh.py -q`
 - `python -m pytest src/tests/website_publishing -q`
-- `python scripts/run_backend_refresh.py --skip-revalidate`
+- `python scripts/run_backend_refresh.py --profile site --skip-revalidate`
 - `npm run content:validate`
 - `npm run lint`
 - `npm run build`
 
 ## Daily Automation
 
-The scheduled workflow runs once per day at `06:30` Europe/Istanbul (`03:30` UTC) and can also be started manually with `workflow_dispatch`.
+The scheduled workflow runs once per day at `06:30` Europe/Istanbul (`03:30` UTC) and can also be started manually with `workflow_dispatch`. It uses the keyless `site` profile: only the onset, escalation, and structural evidence published by the website is rebuilt. The `full` profile remains available locally for research runs that include interstate experiments.
 
-Expected repository configuration:
-
-- GitHub secret `OPENROUTER_API_KEY` if AI-written country reasons are desired
-- GitHub variable `OPENROUTER_MODEL` for the model identifier
-- optional GitHub variable `OPENROUTER_BASE_URL` when the default OpenRouter endpoint should be overridden
-
-If no OpenRouter secret or model is configured, the publication path still works and falls back to deterministic rule-based summaries.
+No account, API key, or model secret is required by the scheduled publication path. Public summaries are deterministic and source-derived.
 
 The workflow uploads refresh logs from `artifacts/ops/*.log` as run artifacts, but those logs are ignored from version control.
 

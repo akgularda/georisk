@@ -68,6 +68,27 @@ def test_build_refresh_steps_covers_daily_pipeline(tmp_path: Path) -> None:
     )
 
 
+def test_site_refresh_profile_runs_only_published_model_families(tmp_path: Path) -> None:
+    labels = [step.label for step in build_refresh_steps(tmp_path, profile="site")]
+
+    assert labels == [
+        "Build dense country-week features",
+        "Train structural onset country-week model",
+        "Calibrate structural onset country-week model",
+        "Run structural onset backtest",
+        "Train onset country-week model",
+        "Calibrate onset country-week model",
+        "Predict onset country-week model",
+        "Train logit country-week model",
+        "Calibrate logit country-week model",
+        "Predict logit country-week model",
+        "Run onset backtest",
+        "Run logit backtest",
+        "Publish website snapshot",
+    ]
+    assert all("interstate" not in label.lower() for label in labels)
+
+
 def test_run_backend_refresh_executes_steps_writes_log_and_revalidates(tmp_path: Path, monkeypatch) -> None:
     calls: list[tuple[str, ...]] = []
     revalidate_calls: list[str] = []
